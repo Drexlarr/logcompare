@@ -23,39 +23,49 @@ one(){
 
 	read -p "Ingrese el nombre del archivo xml: " fxml
 
-	if test -f $fxml; then
-		sed '0,/<expectedresults>/d' $fxml > clear.xml
-		sed -i 's/&nbsp;/ /g' clear.xml
-		sed -i 's/ </</g' clear.xml
-		sed -i "s,/ol,-ol," clear.xml
-
-		ol=0
-		olline=0
-		clear="clear.xml"
-
-		while read lline;
-		do
-			((olline+=1))
-			if [[ $lline =~ "<ol start" ]]; then
-				ol=1
-			fi
-			if [[ $ol == 1 && $lline == "<-ol>" ]]; then
-				((olline+=1))
-				sed -i "$olline"',$d' clear.xml
-				break
-			fi
-		done < $clear
-
-		if [[ $ol == 0 ]]; then
-			sed -i "/-ol>/Q" clear.xml
-		fi
-
-		./recolectlog
+	if test -f "files/$fxml"; then
+		echo -e "ta bien\n"
 	else 	
 		echo -e "Nombre de archivo invalido\n" 	
 		return
 	fi
 
+	read -p "Ingrese el nombre del archivo log: " flog
+
+	if test -f "files/$flog"; then
+		echo -e "ta bien\n"
+	else 	
+		echo -e "Nombre de archivo invalido\n" 	
+		return
+	fi
+
+	sed '0,/<expectedresults>/d' "files/$fxml" > files/clear.xml
+	sed -i 's/&nbsp;/ /g' files/clear.xml
+	sed -i 's/ </</g' files/clear.xml
+	sed -i "s,/ol,-ol," files/clear.xml
+
+	ol=0
+	olline=0
+	clear="files/clear.xml"
+
+	while read lline;
+	do
+		((olline+=1))
+		if [[ $lline =~ "<ol start" ]]; then
+			ol=1
+		fi
+		if [[ $ol == 1 && $lline == "<-ol>" ]]; then
+			((olline+=1))
+			sed -i "$olline"',$d' files/clear.xml
+			break
+		fi
+	done < $clear
+
+	if [[ $ol == 0 ]]; then
+		sed -i "/-ol>/Q" files/clear.xml
+	fi
+
+	./recolectlog $flog
 
 
     echo "El reporte generado se encuentra en el archivo 'results.txt'" && sleep 2

@@ -21,7 +21,9 @@ int* rabin_karp(int* posfound, char* pat, char* txt, int q){
         h = (h*d)%q;
  
     for (i = 0; i < M; i++){
-        p = (d*p + pat[i])%q;     
+        p = (d*p + pat[i])%q;  
+        t = (d*t + txt[i])%q;
+    }    
 
     for (i = 0; i <= N - M; i++){ 
 
@@ -48,5 +50,6 @@ int* rabin_karp(int* posfound, char* pat, char* txt, int q){
     posfound[99] = ocd;
     return posfound;
 }
+
  
 

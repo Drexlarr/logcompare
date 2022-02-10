@@ -6,6 +6,7 @@
 
 void write_log(FILE* flog, int pos, char* line){
     fprintf(flog, "===>");
+    printf("hola");
     for(int i = pos+7; i < strlen(line); i++){
         if(line[i] == '<') break;
         fprintf(flog, "%c", line[i]);
@@ -23,8 +24,10 @@ void find_log_lines(FILE* flog, FILE* fxml){
     int ocd;
 
     while ((readxml = getline(&linexml, &lenlxml, fxml)) != -1) {
+        printf("%s", linexml);
         posfound = rabin_karp(arr, "===&gt;", linexml, 101);
         if(posfound[99] > 0){
+            printf("printf");
             for(int i = 0; i < posfound[99]; i++){
                 write_log(flog, posfound[i], linexml);
             }
@@ -70,7 +73,7 @@ void comp_files(FILE* flog, FILE* finput, FILE* fresults){
     }
 }
 
-int main(){
+int main(int argc, char *argv[]){
     FILE* finput;
     FILE* fxml; 
     FILE* flog;
@@ -78,26 +81,20 @@ int main(){
     char* linelog = NULL;
     char* lineinput = NULL;
     size_t lenllog = 0, lenlinput = 0;
-    char namelog[30];
+    ssize_t readline;
 
 
-    printf("Ingrese el nombre del archivo log: ");
-    scanf("%s", namelog);
+    finput = fopen("files/input.txt", "w");
+    fxml = fopen("files/clear.xml", "r"); 
+    fresults = fopen("files/results.txt", "w");
+    flog = fopen(argv[0], "r");
 
-    if (access(namelog, F_OK) != 0 && strcmp(namelog, "results.txt") != 0 && strcmp(namelog, "input.txt") != 0){
-        printf("Nombre de archivo invalido\n");
-        return 0;
-    }
 
-    finput = fopen("input.txt", "w");
-    fxml = fopen("clear.xml", "r"); 
-    fresults = fopen("results.txt", "w");
-    flog = fopen(namelog, "r");
-
+    readline = getline(&lineinput, &lenlinput, fxml);
+    printf("%s", lineinput);
     find_log_lines(finput,fxml);
-
     fclose(finput);
-    finput = fopen("input.txt", "r");
+    finput = fopen("files/input.txt", "r");
 
     comp_files(flog, finput, fresults);
 

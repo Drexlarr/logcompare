@@ -1,0 +1,28 @@
+===>iso_8583_to_msg_inter: DE003[1000].
+===>IMP_insert_into_txnlog: INSERTO EN LA TABLA TXNLOG.
+===>snd_bco: Enviare a = (FSWPACIF) envsw:0.
+===>IF_txrx: Receiving Message from  SRV[GWSSISGO] LEN[2]
+===>error_gwy_to_msg_inter: rc_gwy[91], error de tiempo de espera, timeout
+===>error_gwy_to_msg_inter: Para error en gwy [91], no se envia respuesta
+===>matching_msg: HIZO MATCHING.
+===> msg.msgtype:420, ===&gt;IMP_insert_into_txnsaf: INSERTO EN LA TABLA TXNSAF. y ===&gt;update_txn_log: ACTUALIZA TABLA TXNLOG
+===>IMP_insert_into_txnsaf: INSERTO EN LA TABLA TXNSAF. y ===&gt;update_txn_log: ACTUALIZA TABLA TXNLOG
+===>update_txn_log: ACTUALIZA TABLA TXNLOG
+===>msg_inter_to_iso_8583: MSGTYPE[110].
+===>msg_inter_to_iso_8583: B039[91]
+===>debo_enviar_saf: Send Echo, monitor .
+===>snd_bco: Enviare a = (FSWPACIF) envsw:0.
+===>IF_txrx: Sending Message to SRV[GWSSISGO]
+===>sendMsgToHost: Enviando requerimiento de 2429 bytes hacia autorizador.
+===>six_applic: 2429 bytes message read from app server(GWYSISGO
+===>IF_tx: Sending [8016]bytes to appl[SWRSP].
+===>snd_term: msgtype [810] appl (SNDSAF).
+===>snd_term: msgtype [810] appl (SNDSAF).
+===>snd_bco: Enviare a = (FSWPACIF) envsw:0.
+===>IF_txrx: Sending Message to SRV[GWSSISGO]
+===>sendMsgToHost: Enviando requerimiento de 2429 bytes hacia autorizador.
+===>six_applic: 2429 bytes message read from app server(GWYSISGO
+===>iso_8583_to_msg_inter: DE039[00]. y ===&gt;IF_tx: Message sent to appl[SWRSP].
+===>IF_tx: Message sent to appl[SWRSP].
+===>snd_saf: Envia Rpta SAF.
+===>IMP_update_txnsaf: Actualizo EN LA TABLA TXNSAF.
