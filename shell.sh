@@ -23,23 +23,19 @@ one(){
 
 	read -p "Ingrese el nombre del archivo xml: " fxml
 
-	if test -f "files/$fxml"; then
-		echo -e "ta bien\n"
-	else 	
+	if ! test -f "files/$fxml"; then	
 		echo -e "Nombre de archivo invalido\n" 	
 		return
 	fi
 
 	read -p "Ingrese el nombre del archivo log: " flog
 
-	if test -f "files/$flog"; then
-		echo -e "ta bien\n"
-	else 	
+	if ! test -f "files/$flog"; then
 		echo -e "Nombre de archivo invalido\n" 	
 		return
 	fi
 
-	sed '0,/<expectedresults>/d' "files/$fxml" > files/clear.xml
+	sed '1,/<expectedresults>/d' "files/$fxml" > files/clear.xml
 	sed -i 's/&nbsp;/ /g' files/clear.xml
 	sed -i 's/ </</g' files/clear.xml
 	sed -i "s,/ol,-ol," files/clear.xml

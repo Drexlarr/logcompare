@@ -6,7 +6,6 @@
 
 void write_log(FILE* flog, int pos, char* line){
     fprintf(flog, "===>");
-    printf("hola");
     for(int i = pos+7; i < strlen(line); i++){
         if(line[i] == '<') break;
         fprintf(flog, "%c", line[i]);
@@ -24,10 +23,8 @@ void find_log_lines(FILE* flog, FILE* fxml){
     int ocd;
 
     while ((readxml = getline(&linexml, &lenlxml, fxml)) != -1) {
-        printf("%s", linexml);
         posfound = rabin_karp(arr, "===&gt;", linexml, 101);
         if(posfound[99] > 0){
-            printf("printf");
             for(int i = 0; i < posfound[99]; i++){
                 write_log(flog, posfound[i], linexml);
             }
@@ -68,6 +65,7 @@ void comp_files(FILE* flog, FILE* finput, FILE* fresults){
         while ((readlog = getline(&linelog, &lenllog, flog)) != -1) {
             posfound = rabin_karp(arr, lineinput, linelog, 101);
             ocd += posfound[99];
+            printf("%d pos ", posfound[99]);
         }
         write_result(fresults, ocd, lineinput);
     }
@@ -90,8 +88,6 @@ int main(int argc, char *argv[]){
     flog = fopen(argv[0], "r");
 
 
-    readline = getline(&lineinput, &lenlinput, fxml);
-    printf("%s", lineinput);
     find_log_lines(finput,fxml);
     fclose(finput);
     finput = fopen("files/input.txt", "r");

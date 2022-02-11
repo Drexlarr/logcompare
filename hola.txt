@@ -1,6 +1,0 @@
-Primera linea
-- 
-Tercera linea
-Cuarta linea
-Tercera linea
-Cuarta lineaa
