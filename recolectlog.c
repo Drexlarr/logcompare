@@ -23,7 +23,7 @@ void find_log_lines(FILE* flog, FILE* fxml){
     int ocd;
 
     while ((readxml = getline(&linexml, &lenlxml, fxml)) != -1) {
-        posfound = rabin_karp(arr, "===&gt;", linexml, 101);
+        posfound = rabin_karp("===&gt;", linexml, 101);
         if(posfound[99] > 0){
             for(int i = 0; i < posfound[99]; i++){
                 write_log(flog, posfound[i], linexml);
@@ -55,17 +55,15 @@ void comp_files(FILE* flog, FILE* finput, FILE* fresults){
     char* lineinput = NULL;
     size_t lenllog = 0, lenlinput = 0;
     ssize_t readlog, readinput;
-    int arr[100];
-    int* posfound; 
-    int ocd;
+    int* arr; 
+    int ocd; 
 
     while ((readinput = getline(&lineinput, &lenlinput, finput)) != -1) {
         rewind(flog);
         ocd = 0;
         while ((readlog = getline(&linelog, &lenllog, flog)) != -1) {
-            posfound = rabin_karp(arr, lineinput, linelog, 101);
-            ocd += posfound[99];
-            printf("%d pos ", posfound[99]);
+            arr = rabin_karp(lineinput, linelog, 101);
+            ocd += arr[99];
         }
         write_result(fresults, ocd, lineinput);
     }
@@ -76,16 +74,13 @@ int main(int argc, char *argv[]){
     FILE* fxml; 
     FILE* flog;
     FILE* fresults;
-    char* linelog = NULL;
-    char* lineinput = NULL;
-    size_t lenllog = 0, lenlinput = 0;
-    ssize_t readline;
+    
 
 
     finput = fopen("files/input.txt", "w");
     fxml = fopen("files/clear.xml", "r"); 
     fresults = fopen("files/results.txt", "w");
-    flog = fopen(argv[0], "r");
+    flog = fopen(argv[1], "r");
 
 
     find_log_lines(finput,fxml);

@@ -61,7 +61,7 @@ one(){
 		sed -i "/-ol>/Q" files/clear.xml
 	fi
 
-	./recolectlog $flog
+	./recolectlog files/$flog
 
 
     echo "El reporte generado se encuentra en el archivo 'results.txt'" && sleep 2
