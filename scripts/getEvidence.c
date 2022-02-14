@@ -78,17 +78,20 @@ void retrieveEvidenceGWY(char* gwy_name){
     char* path = strtok(line, "=");
     path = strtok(NULL, "=");
     path[strcspn(path, "\n")] = 0;
+    char route[100];
+    strcpy(route, path);
 
     //Construyendo el comando
     char* command;
     //IMPORTANTE -mtime 0
-    char* first_params = " -maxdepth 1 -type f -mtime 1 | grep -P '(";
+    char* first_params = " -maxdepth 1 -type f -mtime 0 | grep -P '(";
     char* second_params = ")'| xargs -I{} cp -n {} ./evidencias/";
+    char* erase_command = ")'| xargs -I{} truncate -s 0 ";
 
     printf("    Extrayendo de: %s\n", path);
-    command = malloc(strlen(path)+101);
+    command = malloc(strlen(path)+151);
     strcpy(command, "find ");
-    strcat(command, path);
+    strcat(command, route);
     strcat(command, first_params);
 
     fgets(line, sizeof(line), ptr);
@@ -97,15 +100,30 @@ void retrieveEvidenceGWY(char* gwy_name){
     createDirectory();
     for(int i = 0; i < len_copies; i++){
         printf("    Extrayendo copia: %s\n", arr_copies[i]);
-
+        //Armando comando para copiar evidencias de una copia
         arr_copies[i][strcspn(arr_copies[i], "\n")] = 0;
         strcat(command, arr_copies[i]);
         strcat(command, second_params);
 
+        //Ejecutando comando de copia
+        //printf("    Comando: %s\n\n", command);
         system(command);
 
-        command[strlen(command) - strlen(arr_copies[i]) -
+        //Restableciendo el comando para borrar el contenido de las copias
+        //ya recolectadas
+        command[strlen(command) -
                 strlen(second_params)] = '\0';
+
+        //Ejecutando comando de borrado de contenido
+        strcat(command, erase_command);
+        //strcat(command, route);
+        strcat(command, "/{}");
+        //printf("    Comando: %s\n\n", command);
+        system(command);
+
+        //Restableciendo el comando para utilizarlo en otras copias
+        command[strlen(command) - strlen(arr_copies[i]) -
+                strlen(erase_command) - 3] = '\0';
     } 
     addingPrefix();
     printf("\n    EXTRACCIÓN DE LAS COPIAS DE %s %sTERMINADA!%s\n\n", gwy_name, GRN, WHT);
