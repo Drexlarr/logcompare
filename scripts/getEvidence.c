@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
-#include <errno.h>
 
-#define MAX_GWY 10
 #define MAX_COPIES 5
 
 #define RED "\e[0;31m"
@@ -14,8 +11,8 @@
 
 FILE *ptr;
 
-char arr_gwy[MAX_GWY][10];
-int len_gwy;
+char gwy_picked[10];
+char gwy_prefix[20];
 
 char arr_copies[MAX_COPIES][10];
 int len_copies;
@@ -34,63 +31,37 @@ void loadConfigFile(char *fileName) {
     }
 }
 
-char *remove_brackets(char *str){
-    int i = 0, j = 0;
-    while(str[i]){
-        if(str[i] != '[' && str[i] != ']')
-            str[j++] = str[i];
-        i++;
-    }
-    str[j] = '\0';
-    return str;
-}
-
-//Función que guarda variables que pueden tener más de un valor: "gwy" y "copyfile"
-void getConfigValue(int type_tag, char* string){
+//Función que guarda variables que pueden tener más de un valor: "copyfile"
+void getConfigValue(char* string){
     char* token = strtok(string, "=");
     token = strtok(NULL, "=");
     int length_arr = 0;
-    for (char *gwy_name = strtok(token, ","); gwy_name != NULL;
-         gwy_name = strtok(NULL, ",")) {
-        gwy_name[strcspn(gwy_name, "\n")] = 0;
-        if (!type_tag)
-            strcpy(arr_gwy[length_arr++], gwy_name);
-        else
-            strcpy(arr_copies[length_arr++], gwy_name);
+    for (char *copies = strtok(token, ","); copies != NULL;
+         copies = strtok(NULL, ",")) {
+        copies[strcspn(copies, "\n")] = 0;
+        strcpy(arr_copies[length_arr++], copies);
     }
-    if(!type_tag)
-        len_gwy = length_arr;
-    else
-        len_copies = length_arr;
+    len_copies = length_arr;
 }
 
-char* createDirectory(char* gwy_name){
-    char* path = "./evidencias/";
-    char* command = malloc(strlen(path)+101);
-    char* gwy_name_without_brackets = malloc(strlen(gwy_name)+1);
-    char* path_complete = malloc(strlen(path)+50);
-    
-    strcpy(command, "mkdir -p ");
-    strcat(command, path);
-    
-    strcpy(gwy_name_without_brackets, gwy_name);
-    remove_brackets(gwy_name_without_brackets);
+//Crea el directorio de evidencias si es que este ya no está creado
+void createDirectory(){
+    char* path = "./evidencias";
+    char* command = "mkdir ./evidencias/";
+    system("rm -rf ./evidencias");
 
-    strcpy(path_complete, path);
-    strcat(path_complete, gwy_name_without_brackets);
+    printf("    %s** Se crea el directorio de evidencias **%s\n", YEL, WHT);
+    system(command);
+}
 
-    strcat(command, gwy_name_without_brackets);
-
-    DIR* dir = opendir(path_complete);
-
-    if (dir){
-        closedir(dir);
-    } else if(ENOENT == errno){
-      printf("    %s** Se crea el directorio de evidencias %s**%s\n", YEL,
-             gwy_name_without_brackets, WHT);
-      system(command);
-    }
-    return gwy_name_without_brackets;
+//Añade el prefijo introducido por el usuario a los archivos recolectados
+void addingPrefix(){
+    char* incomplete = "ls ./evidencias | xargs -I {} mv ./evidencias/{} ./evidencias/";
+    char* complete = malloc(strlen(incomplete)+21);
+    strcpy(complete, incomplete);
+    strcat(complete, gwy_prefix);
+    strcat(complete, "-{}");
+    system(complete);
 }
 
 //Función que se encarga de obtener el path de donde se obtendrán las evidencias
@@ -121,7 +92,9 @@ void retrieveEvidenceGWY(char* gwy_name){
     strcat(command, first_params);
 
     fgets(line, sizeof(line), ptr);
-    getConfigValue(1, line);
+    getConfigValue(line);
+
+    createDirectory();
     for(int i = 0; i < len_copies; i++){
         printf("    Extrayendo copia: %s\n", arr_copies[i]);
 
@@ -129,18 +102,17 @@ void retrieveEvidenceGWY(char* gwy_name){
         strcat(command, arr_copies[i]);
         strcat(command, second_params);
 
-        char* gwy_wt_brackets = createDirectory(gwy_name);
-        strcat(command, gwy_wt_brackets);
-        createDirectory(gwy_wt_brackets);
-
         system(command);
+
         command[strlen(command) - strlen(arr_copies[i]) -
-                strlen(second_params) - strlen(gwy_wt_brackets)] = '\0';
+                strlen(second_params)] = '\0';
     } 
-    printf("\n    EXTRACCIÓN DE %s %sTERMINADA!%s\n", gwy_name, GRN, WHT);
+    addingPrefix();
+    printf("\n    EXTRACCIÓN DE LAS COPIAS DE %s %sTERMINADA!%s\n\n", gwy_name, GRN, WHT);
 }
 
 //Función que encuentra y obtiene los valores del tag GWY_LOGS
+//Se encarga de llamar a la función que recolecta las evidencia de los GWY
 void readGWYS(){
     char* gwy = "[GWY_LOGS]";
     char retrieve_gwy[100];
@@ -151,22 +123,31 @@ void readGWYS(){
     }
 
     fgets(retrieve_gwy,sizeof(retrieve_gwy), ptr);
-    getConfigValue(0, retrieve_gwy);
+    strcpy(gwy_picked, strtok(retrieve_gwy, "="));
+    strcpy(gwy_picked, strtok(NULL, "=")); 
+    gwy_picked[strcspn(gwy_picked, "\n")] = 0;
 
-    for(int i = 0; i < len_gwy; i++){ 
-        printf("\nGateway: %s\n", arr_gwy[i]);
-        retrieveEvidenceGWY(arr_gwy[i]);
-    }
+    printf("\nGateway: %s\n", gwy_picked);
+    retrieveEvidenceGWY(gwy_picked);
 }
 
 int main(int argc, char *argv[]) {
-    if(argc == 2){
+    //TODO    
+    //un prefijo dado por el usuario
+    if(argc == 3){
         loadConfigFile(argv[1]);
-        readGWYS();
+        if(strlen(argv[2]) < 20){
+            strcpy(gwy_prefix,argv[2]);
+            readGWYS();
+        }
+        else{
+            printf("\n%sERROR:%s El prefijo es demasiado grande\n\n",RED, WHT);
+        }
         fclose(ptr);
     }else{
       printf("\n%sERROR:%s Ingrese la ruta en donde se encuentra el archivo de "
-             "configuracion\n\n",
+             "configuracion y el prefijo que llevarán los archivos "
+             "recolectados\n\n",
              RED, WHT);
     }
     return 0;
