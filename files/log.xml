@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <testcases>
-<testcase internalid="221352" name="Consulta integrada - 930099-CVN18">
-	<node_order><![CDATA[0]]></node_order>
-	<externalid><![CDATA[3144]]></externalid>
+<testcase internalid="221354" name="Consulta tipo de cambio - 980000-CVN18">
+	<node_order><![CDATA[1]]></node_order>
+	<externalid><![CDATA[3145]]></externalid>
 	<summary><![CDATA[<ul>
-    <li>El test consiste en validar el correcto flujo de la transacci&oacute;n financiera de Consulta integrada con prcode de valor 930099.</li>
-    <li>La transacci&oacute;n es enviada hacia el autorizador de COMPARTAMOS empleando el formateador sincrono FSWCFIS.</li>
+    <li>El test consiste en validar el correcto flujo de la transacci&oacute;n financiera de&nbsp;<strong>Consulta&nbsp;tipo de cambio</strong>&nbsp;con prcode de valor&nbsp;<strong>980000.</strong></li>
+    <li>La transacci&oacute;n es enviada hacia el autorizador de&nbsp;<strong>COMPARTAMOS&nbsp;</strong>empleando el formateador sincrono&nbsp;<strong>FSWCFIS</strong>.</li>
 </ul>]]></summary>
-	<steps><![CDATA[<p><strong>&nbsp;Precondiciones:</strong></p>
-<ul>
-    <li>Los procesos <strong>UBISOINT</strong>, <strong>UBINTISO</strong> y <strong>FSWCFIS </strong>junto con todas sus copias deben encontrarse levantados (Estado: READING).</li>
-    <li>Los procesos <strong>SWREQ </strong>y <strong>SWRSP </strong>junto con todas sus copias deben encontrarse levantados (Estado: READING).</li>
-    <li>El gateway asincrono <strong>GUNIBANC </strong>debe encontrarse levantado (Estado: ACTIVE o ENABLE).</li>
-    <li>El gateway WebService <strong>GWSCFIS </strong>debe encontrarse levantado (Estado: READING).</li>
-    <li>El par&aacute;metro &quot;<strong>SRV1TO</strong>&quot; del archivo <strong>$SIXDIR/tbl/ifce/fswcfis.cfg</strong> debe tener el valor igual a &quot;<strong>GWSCFIS</strong>&quot;</li>
-    <li>La conexi&oacute;n con base de datos debe estar activa.</li>
+	<steps><![CDATA[<p>&nbsp;<b>Precondiciones:</b></p>
+<ul type="disc">
+    <li><span style="font-size: 9pt; padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">Los procesos</span><b style="font-size: 9pt">&nbsp;</b><b style="font-size: 9pt">UBISOINT</b>,&nbsp;<strong>UBINTISO</strong><span style="font-size: 9pt; padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>&nbsp;</strong>y&nbsp;<strong>FSWCFIS&nbsp;</strong>junto con todas sus copias</span><b style="font-size: 9pt">&nbsp;</b><span style="font-size: 9pt; padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">deben encontrarse levantados (Estado: READING).</span></li>
+    <li><span style="font-size: 9pt; padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">Los procesos&nbsp;<b>SWREQ</b>&nbsp;y&nbsp;<b>SWRSP&nbsp;</b>junto con todas sus copias&nbsp;deben encontrarse levantados (Estado: READING).</span></li>
+    <li>El gateway asincrono&nbsp;<strong>GUNIBANC&nbsp;</strong>debe encontrarse levantado (Estado: ACTIVE o ENABLE).</li>
+    <li>El gateway WebService&nbsp;<strong>GWSCFIS&nbsp;</strong>debe encontrarse levantado (Estado: READING).</li>
+    <li>El par&aacute;metro &quot;<strong>SRV1TO</strong>&quot; del archivo&nbsp;<strong>$SIXDIR/tbl/ifce/fswcfis.cfg</strong>&nbsp;debe tener el valor igual a &quot;<strong>GWSCFIS</strong>&quot;</li>
+    <li><span style="font-size: 9pt; padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">La conexi&oacute;n con base de datos debe estar activa.</span></li>
 </ul>
-<p><strong>Env&iacute;o de la transacci&oacute;n:</strong></p>
+<div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">
+<div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">
+<div><strong>Env&iacute;o de la transacci&oacute;n:</strong></div>
 <ol>
-    <li>Configurar el archivo de tramas <strong>$SIXDIR/tbl/lanzar_tramas/tramas_uba_adq.txt</strong>, colocar en la primera linea de este archivo la trama de nombre <strong>PEFTCMP-3144-Consulta_integrada-930099-CVN18</strong> y guardar los cambios.</li>
+    <li>Configurar el archivo de tramas&nbsp;<strong>$SIXDIR/tbl/lanzar_tramas/tramas_uba_adq.txt</strong>, colocar en la primera linea de este archivo la trama de nombre&nbsp;<strong>PEFTCMP-3145-Consulta_tipo_de_cambio-980000-CVN18</strong>&nbsp;y guardar los cambios.</li>
     <li>Ejecutar el simulador MultiSimu, ubicado en&nbsp;<strong>$SIXDIR/binappl</strong>.</li>
     <li>En el simulador, seleccionar la&nbsp;<strong>opci&oacute;n 6</strong>&nbsp;e introducir el nombre del archivo de configuraci&oacute;n : &quot;<strong>config_uba_adq.cfg</strong>&quot;.</li>
     <li>Abrir una nueva pesta&ntilde;a e ir a la ruta&nbsp;<strong>$SIXDIR/log</strong>&nbsp;y ejecutar el comando rl para iniciar el grabado del log(ejemplo: rl nombreLog_1)</li>
     <li>Ubicarse en el simulador y seleccionar la&nbsp;<strong>opcion 5</strong>&nbsp;(<span style="margin: 0px; padding: 0px; color: rgb(51, 102, 255);"><strong>Opcion[5] Enviar Transacciones SERVIDOR TCP</strong></span>)</li>
     <li>Cuando la transaccion haya finalizado, detener el grabado del log con CTRL+C.</li>
 </ol>
+</div>
+</div>
 <p>&nbsp;</p>]]></steps>
 	<expectedresults><![CDATA[<div>
-<div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><u><strong>Resultados esperados y revisi&oacute;n de log</strong></u></div>
+<div>&nbsp;<u><strong>Resultados esperados y revisi&oacute;n de log</strong></u></div>
 <ol>
     <li>El gateway&nbsp;<strong>GUNIBANC&nbsp;</strong>recibe la transacci&oacute;n y la env&iacute;a al formateador&nbsp;<strong>UBISOINT&nbsp;</strong>(&nbsp;<strong>LOG</strong><strong>:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_rx: applfrom[GUNIB&nbsp;</strong></span>)</li>
     <li>El proceso&nbsp;<strong>UBISOINT&nbsp;</strong>recibe el mensaje 0200.</li>
@@ -37,8 +41,10 @@
     <li>El proceso&nbsp;<strong>UBISOINT&nbsp;</strong>arma la trama de requerimiento de validaci&oacute;n de ARQC/generaci&oacute;n de ARPC, validaci&oacute;n de PIN e iCVV (comando S0). (&nbsp;<strong>LOG:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;set_ReqEMV_val: Se termino de armar la trama de requerimiento de validacion de chip</strong></span>&nbsp;y&nbsp;<strong>LOG:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;val_vpin_iwk: Se termino de armar la trama de requerimiento de validacion de PIN y CVV/iCVV</strong></span>&nbsp;)</li>
     <li>El proceso&nbsp;<strong>UBISOINT&nbsp;</strong>env&iacute;a el comando S0 al SIX/SECURITY seg&uacute;n el siguiente flujo:</li>
 </ol>
+<div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><span style="color: rgb(128,0,128); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">
 <div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong><span style="color: rgb(128,0,128); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">UBISOINT&nbsp;<span style="color: rgb(0,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&gt;</span>&nbsp;MSEGINT&nbsp;<span style="color: rgb(0,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&gt;</span>&nbsp;MEMVSRV&nbsp;<span style="color: rgb(0,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&gt;</span>&nbsp;RACAL&nbsp;<span style="color: rgb(0,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&gt;</span>&nbsp;MEMVSRV&nbsp;<span style="color: rgb(0,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&gt;</span>&nbsp;MSEGINT&nbsp;<span style="color: rgb(0,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&gt;</span>&nbsp;UBISOINT.</span></strong></div>
-<div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">(&nbsp;<strong>LOG:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_isoint_validate: Se envia requerimiento de validacion del ARQC y/o PIN/iCVV</strong></span>,&nbsp;<strong>LOG:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_isoint_validate: Se recibe la respuesta de validacion del ARQC y/o PIN/iCVV</strong></span>&nbsp;y <span style="color: #3366ff"><strong>===&gt;memvsrv_arqc_req_to_sec: CSU [00860000].</strong></span> )</div>
+<div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><span style="color: #000000">(&nbsp;<strong>LOG</strong></span><strong>:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_isoint_validate: Se envia requerimiento de validacion del ARQC y/o PIN/iCVV</strong></span>,<span style="color: #000000">&nbsp;</span><span style="color: #000000"><strong>LOG:</strong></span>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_isoint_validate: Se recibe la respuesta de validacion del ARQC y/o PIN/iCVV</strong></span>&nbsp;<span style="color: #000000">y </span><span style="color: #3366ff"><strong>===&gt;memvsrv_arqc_req_to_sec: CSU [00860000].</strong></span> <span style="color: #000000">)</span></div>
+</span></div>
 <ol start="7">
     <li>El proceso&nbsp;<strong>UBISOINT&nbsp;</strong>analiza las respuestas de la validaci&oacute;n de ARQC/generaci&oacute;n de ARPC, validaci&oacute;n de PIN e iCVV. (&nbsp;<strong>LOG:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_isoint_validate: cod_rsp_emv: 0000&nbsp;</strong></span>y&nbsp;<strong>LOG:</strong>&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_isoint_validate: validacion de PIN deshabilitada</strong></span>&nbsp;)</li>
     <li>El proceso&nbsp;<strong>UBISOINT</strong>, al determinar que las validaciones previas fueron existosas,<strong>&nbsp;</strong>env&iacute;a el mensaje 0200 a proceso&nbsp;<strong>SWREQ</strong>. (&nbsp;<strong>LOG:&nbsp;</strong><span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>===&gt;IF_tx: Message sent to appl[SWREQ]</strong></span>&nbsp;)</li>
@@ -129,7 +135,7 @@
     <li>El valor 91 es&nbsp;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>codigo del TAG, que en este caso es 91</strong>.</span></li>
     <li>El valor 0A es&nbsp;<span style="color: rgb(51,153,102); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>la longitud en Bytes que tendr&aacute; el valor (mitad de la longitud visualizada del valor del tag)</strong>.</span></li>
     <li>Los primeros 8 asteriscos (color&nbsp;<span style="color: rgb(128,0,128); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>purpura</strong></span>) corresponden al ARPC.</li>
-    <li>Los siguientes 8 astericos (color&nbsp;<span style="color: rgb(128,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>marron</strong></span>) corresponden al valor CSU, el cual tendr&aacute; el valor 00860000.</li>
+    <li>Los siguientes 8 astericos (color&nbsp;<span style="color: rgb(128,0,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>marron</strong></span>) corresponden al valor CSU, el cual tendr&aacute; el valor de 00860000.</li>
     <li>Los &uacute;ltimos asteriscos (<span style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">color&nbsp;<strong><span style="color: rgb(255,102,0); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">naranja</span></strong>) deben ser igual al c&oacute;digo de respuesta en formato hexadecimal de la codificaci&oacute;n ASCII, es decir, si el c&oacute;digo de respuesta es 00 entonces el valor debe ser 3030</span>.</li>
 </ol>
 </div>
@@ -155,7 +161,6 @@
 <div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><u><strong>Nota 3</strong></u><strong>:</strong>&nbsp;El proceso&nbsp;<strong>RACAL&nbsp;</strong>no registra ninguna operaci&oacute;n en base de datos.</div>
 <div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px">&nbsp;</div>
 <div style="padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><u><strong>Nota 4:</strong></u>&nbsp;Las l&iacute;neas de log donde se incluyen nombres de procesos en min&uacute;sculas pueden variar dependiendo si el proceso tiene copias. Por ejemplo en el paso 12 de los resultados esperados se muestra que la l&iacute;nea de log deber&iacute;a ser &quot;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>fswcfis&nbsp; &nbsp; &nbsp; &nbsp;</strong></span><span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>M[0200]</strong></span>&quot; y eso es porque en la prueba el mensaje 0200 fue enviado al proceso&nbsp;<strong>FSWCFIS&nbsp;</strong>(copia principal del proceso&nbsp;<strong>FSWCFIS</strong>); no obstante, si la transacci&oacute;n hubiese sido enviada al proceso&nbsp;<strong>FSWC001&nbsp;</strong>(copia 1 del proceso&nbsp;<strong>FSWCFIS</strong>), la l&iacute;nea de log pintada ser&iacute;a &quot;<span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>fswc001&nbsp; &nbsp; &nbsp; &nbsp;</strong></span><span style="color: rgb(51,102,255); padding-bottom: 0px; padding-top: 0px; padding-left: 0px; margin: 0px; padding-right: 0px"><strong>M[0200]</strong></span>&quot;.</div>
-</div>
-<p>&nbsp;</p>]]></expectedresults>
+</div>]]></expectedresults>
 </testcase>
 </testcases>
