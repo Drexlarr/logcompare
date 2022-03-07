@@ -3,6 +3,8 @@
 #include "getEvidence.h"
 #include "values.h"
 
+using namespace std;
+
 void menu(){
     int choice = 0;
     system("clear");
