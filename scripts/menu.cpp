@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "getEvidence.h"
 #include "values.h"
+#include "validateLog.h"
 
 using namespace std;
 
@@ -21,6 +22,8 @@ void menu(){
 
         switch (choice){
         case 1: 
+            validateLog(); 
+            system("clear");
             break;
         case 2:
             recolectEvidence();

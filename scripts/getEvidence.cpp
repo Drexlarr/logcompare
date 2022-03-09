@@ -8,6 +8,7 @@
 #include "values.h"
 #include "getEvidence.h"
 #include "getTables.h"
+#include "validateLog.h"
 
 std::vector<Database*>* dbs;
 std::vector<Table*>* tables;
@@ -26,10 +27,6 @@ char localtimen[7];
 
 using namespace std;
 
-bool checkIfFileExists(string filename){
-    ifstream *file = new ifstream(filename);
-    return file->good();
-}
 
 //En esta función se realizan carga de archivos y limpieza de logs,
 //y en caso sea especificado, tablas de base de datos antes de
@@ -84,6 +81,6 @@ int beforeRecolect(){
 
 void recolectEvidence(){    
     if(beforeRecolect() != 0) return; 
-
     recolectAllTables("../files/lognuevo.log"); 
+    getchar();
 }

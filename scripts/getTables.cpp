@@ -215,6 +215,13 @@ void getTracesFromLog(string log_file, Table* table){
     }
 }
 
+
+void printQuery(string fullquery, Table* table){
+    string clearselectquery;
+    clearselectquery = fullquery.substr(fullquery.find("SELECT"));
+    cout << "Para la tabla " << table->tablename <<" se ejecutara el siguiente query: " << clearselectquery << endl;
+}
+
 void selectTracesQuery(Database* db, Table* table, string log_file){
     getTracesFromLog(log_file, table);
     
@@ -224,6 +231,7 @@ void selectTracesQuery(Database* db, Table* table, string log_file){
     char format_trace[14];
     string connect_command;
     string fullquery;
+    string clearselectquery;
     char selectquery[151];
     
     connect_command = connectQuery(db);
@@ -233,7 +241,7 @@ void selectTracesQuery(Database* db, Table* table, string log_file){
     fullquery = string(selectquery);
     if(traces->size() == 1){
         fullquery += table->columntrace + " in ";
-        sprintf(format_trace, "('%s')", traces->at(0).c_str());
+        sprintf(format_trace, "('%s') AND ", traces->at(0).c_str());
         fullquery += string(format_trace);
     }
     else if(traces->size() > 0){
@@ -253,6 +261,9 @@ void selectTracesQuery(Database* db, Table* table, string log_file){
     }
 
     fullquery += table->columndate + " >= '" + string(localdate) + "' AND " + table->columntime + " >= '" + string(localtimen) + "'";
+
+    printQuery(fullquery, table);
+
     fullquery += ") To '../files/" + testcase_prefix +  "-" + table->tablename + "' With CSV DELIMITER ',' HEADER;\"";    
     fullquery += "> null";
     system(fullquery.c_str());
@@ -271,6 +282,7 @@ void selectAllQuery(Database* db, Table* table){
     string connect_command;
     connect_command = connectQuery(db);
     query += connect_command + " -c \"\\copy (SELECT * FROM "+ table->tablename;
+    printQuery(query, table);
     query += ") To '../files/" + testcase_prefix +  "-" + table->tablename + "' With CSV DELIMITER ',' HEADER;\"";
     query += "> null";
     system(query.c_str());

@@ -27,9 +27,7 @@ int* rabin_karp(char* pat, char* txt, int q){
     }    
 
     for (i = 0; i <= N - M; i++){ 
-
         if ( p == t ){
-
             for (j = 0; j < M; j++){
                 if (txt[i+j] != pat[j])
                     break;

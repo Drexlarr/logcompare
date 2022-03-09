@@ -7,7 +7,8 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "*.cpp",
+                "validateLog.cpp",
+                "rabin_karp.c",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
