@@ -11,7 +11,7 @@ namespace fs = std::filesystem;
 #define GRN "\e[0;32m"
 #define YEL "\e[0;33m"
 
-const char* env_p = std::getenv("HOME");
+const std::string env_p = std::getenv("HOME");
 
 std::fstream myFile;
 
@@ -19,10 +19,9 @@ int system(const char *__command);
 
 // Crea la carpeta que contendrá toda la evidencia
 void createEvidenceDir(){
-    system("rm -rf ./tmp/evidencia");
-    printf("%s- Se crea el directorio evidencia%s ./tmp/evidencia\n", YEL, WHT);
-    // borrar el -p
-    system("mkdir -p ./tmp/evidencia");
+    system("rm -rf $HOME/tmp/evidencia");
+    printf("%s- Se crea el directorio evidencia%s $HOME/tmp/evidencia\n", YEL, WHT);
+    system("mkdir $HOME/tmp/evidencia");
 }
 
 const std::string currentDateTime() {
@@ -45,26 +44,23 @@ const std::string ddlFormat() {
     return buf;
 }
 
-void findLogs(std::string path){
-    //parametro
-    std::string launch_time = "2022-03-06 21:45:00";
-    //std::string launch_time = "2022-03-07 12:45:00";
+void findLogs(std::string path, std::string launch_time){
     std::string time_param = currentDateTime();
 
     std::string command = "find ./log -maxdepth 1 -type f -newermt \"" +
                           launch_time + "\" -not -newermt \"" + time_param +
                           "\"|sed 's/\\.\\/log\\///g'|grep ^log|xargs -I{} cp "
-                          "./log/{} ./tmp/evidencia";
+                          "./log/{} $HOME/tmp/evidencia";
     const char *command_char = command.c_str();
     system(command_char);
 }
 
-void getMainLog(std::string prefix){
+void getMainLog(std::string prefix, std::string launch_time){
     printf("\n- Recolectando el log del proceso...\n\n");
-    std::string path = "./tmp/evidencia";
+    std::string path = env_p + "/tmp/evidencia";
     const char* command_char;
     /*Proceso de búsqueda*/
-    findLogs(path);
+    findLogs(path, launch_time);
 
     if(!fs::is_empty(path)){
         std::cout << "  Seleccione el número del archivo correspondiente a guardar:\n";
@@ -83,15 +79,15 @@ void getMainLog(std::string prefix){
         int i = 1;
         for(const auto & entry : fs::directory_iterator(path)){
             std::string filename = entry.path().filename();
-            std::string delete_file = "rm ./tmp/evidencia/";
+            std::string delete_file = "rm $HOME/tmp/evidencia/";
             if(i++ != number){
                 delete_file += filename;
                 command_char = delete_file.c_str();
                 system(command_char);
             } 
         }
-        std::string change_name = "ls ./tmp/evidencia | xargs -I {} mv "
-                                  "./tmp/evidencia/{} ./tmp/evidencia/" +
+        std::string change_name = "ls $HOME/tmp/evidencia | xargs -I {} mv "
+                                  "$HOME/tmp/evidencia/{} $HOME/tmp/evidencia/" +
                                   prefix + "\\ LOG-SIX.log";
         command_char = change_name.c_str();
         system(command_char);
@@ -102,13 +98,13 @@ void getMainLog(std::string prefix){
     }
 }
 
-void getDdlLog(){
+void getDdlLog(std::string prefix){
     printf("\n- Recolectando el ddl...\n\n");
-    std::string path = "./log/ddl/";
+    std::string path = env_p + "/log/ddl/";
     std::string ddl_file = path + ddlFormat();
 
     if(fs::exists(ddl_file)){
-        std::string command = "cp " + ddl_file + " ./tmp/evidencia";
+        std::string command = "cp " + ddl_file + " $HOME/tmp/evidencia/" + prefix + "\\ DDL.log";
         const char* command_char = command.c_str();
         system(command_char);
         printf("- Log del DDL recuperado %sexitosamente%s\n\n",GRN, WHT);
@@ -131,39 +127,51 @@ std::string getValuebyLine(std::string line){
     return value;
 }
 
+void deleteOptionalLogsContent(std::string path, std::string launch_time,
+                               std::string time_param, std::string id) {
+    const char *command_char;
+    std::string command =
+        "find " + path + " -maxdepth 1 -type f -newermt \"" +
+        launch_time + "\" -not -newermt \"" + time_param + "\" |grep " +
+        id + " |xargs -I{} cp /dev/null {}";
+    command_char = command.c_str();
+    system(command_char); 
+}
+
 void getMultipleIdentifiers(std::string ids, std::string path,
-                            std::string launch_time, std::string time_param) {
+                            std::string launch_time, std::string time_param,
+                            std::string prefix) {
   std::string delimiter = ",";
   size_t pos = 0;
   const char *command_char;
   while ((pos = ids.find(delimiter)) != std::string::npos) {
-    std::string command = "find " + path + " -maxdepth 1 -type f -newermt \"" +
-                          launch_time + "\" -not -newermt \"" + time_param +
-                          "\" |grep " + ids.substr(0, pos) +
-                          " |xargs -I{} cp "
-                          "{} ./tmp/evidencia";
+    std::string command =
+        "find " + path + " -maxdepth 1 -type f -printf \"\%f\\n\" -newermt \"" +
+        launch_time + "\" -not -newermt \"" + time_param + "\" |grep " +
+        ids.substr(0, pos) + " |xargs -I{} cp " + path +
+        "/{} $HOME/tmp/evidencia/" + prefix + "-{}";
     command_char = command.c_str();
     system(command_char);
+    deleteOptionalLogsContent(path, launch_time, time_param, ids.substr(0, pos));
     ids.erase(0, pos + delimiter.length());
   }
-  std::string command = "find " + path + " -maxdepth 1 -type f -newermt \"" +
-                        launch_time + "\" -not -newermt \"" + time_param +
-                        "\" |grep " + ids +
-                        " |xargs -I{} cp "
-                        "{} ./tmp/evidencia";
+    std::string command =
+        "find " + path + " -maxdepth 1 -type f -printf \"\%f\\n\" -newermt \"" +
+        launch_time + "\" -not -newermt \"" + time_param + "\" |grep " +
+        ids.substr(0, pos) + " |xargs -I{} cp " + path +
+        "/{} $HOME/tmp/evidencia/" + prefix + "-{}";
   command_char = command.c_str();
   system(command_char);
+  deleteOptionalLogsContent(path, launch_time, time_param, ids.substr(0, pos));
 }
 
-void getOptionalLogs(std::string opt_tag){
+void getOptionalLogs(std::string opt_tag, std::string launch_time, std::string prefix){
     if(myFile.is_open()){
         std::string line;
         std::string path;
         std::string identifiers;
-        //param
-        std::string launch_time = "2022-02-06 18:00:00";
-        //std::string launch_time = "2022-03-07 12:45:00";
         std::string time_param = currentDateTime();
+
         while(std::getline(myFile, line)){
             // Evitemos que tome evidencia y el main tag que ya fue leído
             if(line[0] != '#' && line.find("tags") == std::string::npos){
@@ -180,7 +188,7 @@ void getOptionalLogs(std::string opt_tag){
                       exit(1);
                     }
                     getMultipleIdentifiers(identifiers, path, launch_time,
-                                           time_param);
+                                           time_param, prefix);
                 }
             }
         }
@@ -190,14 +198,15 @@ void getOptionalLogs(std::string opt_tag){
     myFile.seekg(0);
 }
 
-void getMultipleTag(std::string string_to_split){
-    std::string delimiter = ",";
-    size_t pos = 0;
-    while((pos = string_to_split.find(delimiter)) != std::string::npos){
-        getOptionalLogs(string_to_split.substr(0, pos));
-        string_to_split.erase(0, pos + delimiter.length());
-    }
-    getOptionalLogs(string_to_split);
+void getMultipleTag(std::string string_to_split, std::string launch_time,
+                    std::string prefix) {
+  std::string delimiter = ",";
+  size_t pos = 0;
+  while ((pos = string_to_split.find(delimiter)) != std::string::npos) {
+    getOptionalLogs(string_to_split.substr(0, pos), launch_time, prefix);
+    string_to_split.erase(0, pos + delimiter.length());
+  }
+  getOptionalLogs(string_to_split, launch_time, prefix);
 }
 
 std::string getTagConfig(std::string tag){
@@ -212,23 +221,26 @@ std::string getTagConfig(std::string tag){
             }
         }
     }
-    printf("  %sERROR%s No se encontró los tags necesarios\n\n", RED, WHT);
-    myFile.close();
-    exit(1);
-
+    return "";
 }
 
-void readConfigFile(){
+void readConfigFile(std::string launch_time, std::string prefix){
     // Get main Tag values
     std::string main_values = getTagConfig("[MAIN_TAG]");
+    if(main_values == ""){
+        printf("-  %sNo se recolectará%s logs opcionales\n", YEL, WHT);
+        return;
+    }
     std::cout << "- Recuperando logs de: "<< YEL << main_values << WHT << "\n\n";
-    getMultipleTag(main_values);
-    std::cout << "- Logs alternativos recuperados " << GRN
+    getMultipleTag(main_values, launch_time, prefix);
+    std::cout << "- Logs opcionales recuperados " << GRN
                 << "exitosamente" << WHT << std::endl;
     // Limpiar archivos
+    std::cout << "\n- Logs opcionales " << GRN
+                << "limpiados" << WHT << std::endl;
 }
 
-void getGatewayLog(std::string filename){
+void getGatewayLog(std::string filename, std::string launch_time, std::string prefix){
     printf("- Leyendo archivo de configuración...\n\n");
     myFile.open(filename, std::ios::in);
    if(!myFile){
@@ -236,27 +248,28 @@ void getGatewayLog(std::string filename){
         myFile.close();
         exit(1);
    }else{
-       readConfigFile();
+       readConfigFile(launch_time, prefix);
    }
     myFile.close();
 }
 
-void interactive(std::string filename, std::string prefix){
+void interactive(std::string filename, std::string prefix, std::string launch_time){
     printf("\nRECOLECTANDO EVIDENCIA\n\n");
     createEvidenceDir();
-    getMainLog(prefix);
-    getDdlLog();
-    getGatewayLog(filename);
+    getMainLog(prefix, launch_time);
+    getDdlLog(prefix);
+    getGatewayLog(filename, launch_time, prefix);
     std::cout << "\nRECOLECCIÓN GUARDADA EN: " << env_p << "/tmp/evidencia\n\n" ;
 }
 
 int main(int argc, char* argv[]){
-    if(argc != 3)
-      printf("\n%sERROR%s Uso: ./getLogs [1] [2]\n  1) Ubicación del "
-             "archivo de configuración\n  2) Prefijo (PEFTCMP-XXXX)\n\n",
+    if(argc != 4)
+      printf("\n%sERROR%s Uso: ./getLogs [1] [2] [3]\n  1) Ubicación del "
+             "archivo de configuración\n  2) Prefijo (PEFTCMP-XXXX)\n  3) Fecha "
+             "antes del lanzamiento (YYYY-mm-dd HH:MM:SS)\n\n",
              RED, WHT);
     else {
-      interactive(argv[1], argv[2]);
+      interactive(argv[1], argv[2], argv[3]);
     }
     return 0;
 }
