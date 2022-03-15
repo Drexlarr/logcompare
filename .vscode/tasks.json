@@ -8,7 +8,10 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "validateLog.cpp",
-                "rabin_karp.c",
+                "rabin_karp.cpp",
+                "menu.cpp",
+                "getEvidence.cpp",
+                "getTables.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

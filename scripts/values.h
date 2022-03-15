@@ -6,6 +6,7 @@
 #define WHT "\e[0;37m"
 #define GRN "\e[0;32m"
 #define YEL "\e[0;33m"
+#define BLU "\e[0;34m"
 
 
 #define CFG_FILE_DOESNT_EXIST  11;

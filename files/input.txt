@@ -1,24 +1,19 @@
-===>IF_rx: applfrom[GUNIB
-===>iso_8583_to_msg_inter: MSGTYPE[200]
-===>esTxnSinVerificaciones_PIN_AND_CHIP: Transaccion no VISA
-===>esTxnSinVerificaciones_PIN_AND_CHIP: Transaccion realizara validacion de PIN y/o CHIP
-===>set_ReqEMV_val: Se termino de armar la trama de requerimiento de validacion de chip
-===>val_vpin_iwk: Se termino de armar la trama de requerimiento de validacion de PIN y CVV/iCVV
-===>IF_isoint_validate: Se envia requerimiento de validacion del ARQC y/o PIN/iCVV
-===>IF_isoint_validate: Se recibe la respuesta de validacion del ARQC y/o PIN/iCVV
-===>memvsrv_arqc_req_to_sec: CSU [00860000].
-===>IF_isoint_validate: cod_rsp_emv: 0000
-===>IF_isoint_validate: validacion de PIN deshabilitada
-===>IF_tx: Message sent to appl[SWREQ]
-===>put_txn_tbl: INSERTO EN LA TABLA TXNLOG
-===>snd_bco: Enviare a = (FSWCFIS) envsw:0
-===>msg_inter_to_iso_8583: MSGTYPE[200]
-===>IF_txrx: Sending Message to SRV[GWSCFIS]
-===>server_tcp: ENTRADA: [0200
-===>six_applic:
-===>iso_8583_to_msg_inter: MSGTYPE[210]
-===>IF_tx: Message sent to appl[SWRSP]
-===>update_txn_log: Se actualizo registro en la tabla TXNLOG
-===>snd_term: msgtype [210] appl (UBINTISO)
-===>EMV_function: Se envia ARPC y ARC en la trama de respuesta
-===>msg_inter_to_iso_8583: MSGTYPE[210]
+1. ===>IF_rx: applfrom[GUNIB
+2. ===>iso_8583_to_msg_inter: MSGTYPE[200]
+3. ===>esTxnSinVerificaciones_PIN_AND_CHIP: Transaccion no VISA
+4. ===>set_ReqEMV_val: Se termino de armar la trama de requerimiento de validacion de chip
+5. ===>IF_isoint_validate: Se envia requerimiento de validacion del ARQC y/o PIN/iCVV
+6. ===>IF_isoint_validate: cod_rsp_emv: 0000
+7. ===>IF_tx: Message sent to appl[SWREQ]
+8. ===>put_txn_tbl: INSERTO EN LA TABLA TXNLOG
+9. ===>snd_bco: Enviare a = (FSWCFIS) envsw:0
+10. ===>msg_inter_to_iso_8583: MSGTYPE[200]
+11. ===>IF_txrx: Sending Message to SRV[GWSCFIS]
+12. ===>server_tcp: ENTRADA: [0200
+13. ===>six_applic:
+14. ===>iso_8583_to_msg_inter: MSGTYPE[210]
+15. ===>IF_tx: Message sent to appl[SWRSP]
+16. ===>update_txn_log: Se actualizo registro en la tabla TXNLOG
+17. ===>snd_term: msgtype [210] appl (UBINTISO)
+18. ===>EMV_function: Se envia ARPC y ARC en la trama de respuesta
+19. ===>msg_inter_to_iso_8583: MSGTYPE[210]

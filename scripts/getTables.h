@@ -35,5 +35,6 @@ bool isInTraces(string probtrace);
 void deleteDbs();
 void recolectAllTables(string log_file);
 void printQuery(string fullquery, Table* table);
+void prinNRegisters();
 
 #endif

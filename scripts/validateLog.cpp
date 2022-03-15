@@ -3,6 +3,7 @@
 #include <bits/stdc++.h>
 #include "rabin_karp.h"
 #include "values.h"
+#include <sstream>
 
 std::fstream* logfile;
 std::ifstream* xmlfile;
@@ -13,12 +14,12 @@ std::fstream* dirtyxmlfile;
 using namespace std;
 
 bool checkIfFileExists(string filename){
-    ifstream *file = new ifstream(filename);
+    ifstream *file = new ifstream(filename.c_str());
     return file->good();
 }
 
-void writeLog(int pos, string line){
-    *inputfile << "===>";
+void writeLog(int pos, string line, int index){
+    *inputfile << index << ". ===>";
     for(int i = pos+7; i < line.size(); i++){
         if(line[i] == '<') break;
         *inputfile << line[i];
@@ -29,16 +30,15 @@ void writeLog(int pos, string line){
 void findLogLines(){ 
     string line;
     char* lineaux;
-    int arr[100];
     int* posfound; 
     int ocd;
+    int index = 1; 
 
     while (getline(*xmlfile, line)) {
         posfound = rabin_karp("===&gt;", &line[0], 101);
         if(posfound[99] > 0){
-            for(int i = 0; i < posfound[99]; i++){
-                writeLog(posfound[i], line);
-            }
+            writeLog(posfound[0], line, index);  
+            index++;
         }
     }
 }
@@ -60,6 +60,11 @@ void compFiles(){
     int ocd; 
     string process_name;
     string aux;
+    string notfound;
+    int ntfound = 0;
+    int count = 1;
+	stringstream ss;
+	string auxstr;
 
     while (getline(*inputfile, lineinput)) {
         logfile->clear();
@@ -67,7 +72,7 @@ void compFiles(){
         ocd = 0;
         *resultfile << lineinput << endl;
         while (getline(*logfile, linelog)) {
-            arr = rabin_karp(&lineinput[0], &linelog[0], 101);
+            arr = rabin_karp(&lineinput.substr(lineinput.find(".")+1)[0], &linelog[0], 101);
             ocd += arr[99];       
             if (arr[99] > 0){
                 process_name = getProcessName(linelog);
@@ -75,9 +80,25 @@ void compFiles(){
             }
         }
         if(ocd) *resultfile << endl;
-        if(!ocd)
+        if(!ocd){
+            ntfound++;
+			ss << count;
+			auxstr = ss.str();
+            notfound += auxstr + ", ";
+            ss.str("");
             *resultfile << " ---------- NO HALLADO" << endl << endl;
+        }
+        count++;
     }
+
+    if(notfound.size() == 0)
+        printf("%sSUCCESS%s: Se encontraron %d de %d lineas de log\n", GRN, WHT, count, count);
+
+    else{
+        printf("%sWARNING%s: No se encontraron %d de %d lineas de log\n", YEL, WHT, ntfound, count);
+        printf("\t%s**%s No se encontraron las siguientes lineas de log %s(%s)%s. Los indices pueden ser encontrados en el archivo results.txt\n", BLU, WHT, BLU,  notfound.substr(0, notfound.size()-2).c_str(), WHT);
+    }
+     
 }
 
 void clearXmlFile(string dirtyxmlfile_name){
@@ -89,6 +110,8 @@ void clearXmlFile(string dirtyxmlfile_name){
     int aux = 0;
     int count = 0;
     bool completedivs = false;
+	stringstream ss;
+	string auxstr;
     command = "sed '1,/<expectedresults>/d' '" + dirtyxmlfile_name + "' > ../files/clear.xml";
     system(command.c_str());
 	system("sed -i 's/&nbsp;/ /g' ../files/clear.xml");
@@ -116,7 +139,9 @@ void clearXmlFile(string dirtyxmlfile_name){
 
             if(completedivs && line == "<-ol>"){
                 count++;
-                command = "sed -i '" + to_string(count) + "'',$d' ../files/clear.xml";
+				ss << count;
+				ss >> auxstr;
+                command = "sed -i '" + auxstr + "'',$d' ../files/clear.xml";
                 system(command.c_str());
                 break;
             }
@@ -150,8 +175,8 @@ void validateLog(){
     inputfile = new fstream("../files/input.txt", std::ofstream::out | std::ofstream::trunc);
     xmlfile = new ifstream("../files/clear.xml");
     resultfile = new fstream("../files/results.txt", std::ofstream::out | std::ofstream::trunc);
-    logfile = new fstream(logfile_name);
-    dirtyxmlfile = new fstream(dirtyxmlfile_name);
+    logfile = new fstream(logfile_name.c_str());
+    dirtyxmlfile = new fstream(dirtyxmlfile_name.c_str());
 
     clearXmlFile(dirtyxmlfile_name);
 
@@ -163,6 +188,8 @@ void validateLog(){
 
     compFiles();
 
+    getchar();
+    getchar();
     inputfile->close();
     xmlfile->close();
     resultfile->close();

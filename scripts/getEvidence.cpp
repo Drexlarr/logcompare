@@ -74,6 +74,7 @@ int beforeRecolect(){
 
     cfg_filename = "";
     cfgbd_filename = "";
+    pclose(resultcommand);
     getchar();
     getchar();
     return OK;

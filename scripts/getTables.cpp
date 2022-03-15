@@ -5,6 +5,7 @@
 
 extern std::ifstream* cfgfile;
 extern std::ifstream* cfgbdfile;
+extern FILE* resultcommand;
 
 std::vector<string>* traces;
 
@@ -14,6 +15,7 @@ extern std::vector<Table*>* tables;
 extern char localtimen[7];
 extern char localdate[9];
 extern std::string testcase_prefix;
+
 
 int n_tables; 
 
@@ -153,8 +155,8 @@ string connectQuery(Database* db){
 
 void initParameters(string cfg_filename, string cfgbd_filename){
     string line;
-    cfgfile = new ifstream(cfg_filename);
-    cfgbdfile = new ifstream(cfgbd_filename);
+    cfgfile = new ifstream(cfg_filename.c_str());
+    cfgbdfile = new ifstream(cfgbd_filename.c_str());
 
     n_tables = getNTables();
     dbs = new vector<Database*>(n_tables);
@@ -179,6 +181,7 @@ void delQuery(Database* db, Table* table){
     string delquery;
     string connect_command;
     connect_command = connectQuery(db);
+    printf("El comando de conexion es %s\n", connect_command.c_str());
     delquery += connect_command + " -c 'DELETE FROM " + table->tablename + ";'";
     delquery += "> null";
     system(delquery.c_str());
@@ -192,7 +195,7 @@ bool isInTraces(string probtrace){
 }
 
 void getTracesFromLog(string log_file, Table* table){ 
-    ifstream* flog = new ifstream(log_file);
+    ifstream* flog = new ifstream(log_file.c_str());
     string command;
     string line;
     int aux;
@@ -215,6 +218,16 @@ void getTracesFromLog(string log_file, Table* table){
     }
 }
 
+void printNRegisters(){
+    char result[9];
+    string cutresult;
+   
+    fgets(result, 9, resultcommand);
+    cutresult = string(result);
+    cutresult = cutresult.substr(cutresult.find("COPY") + 5, cutresult.size() - 6);
+
+    printf("\t%s**%s Se recolectaron %s registros\n", BLU, WHT, cutresult.c_str());
+}
 
 void printQuery(string fullquery, Table* table){
     string clearselectquery;
@@ -264,9 +277,13 @@ void selectTracesQuery(Database* db, Table* table, string log_file){
 
     printQuery(fullquery, table);
 
-    fullquery += ") To '../files/" + testcase_prefix +  "-" + table->tablename + "' With CSV DELIMITER ',' HEADER;\"";    
-    fullquery += "> null";
-    system(fullquery.c_str());
+    fullquery += ") To '../files/" + testcase_prefix +  "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";    
+
+    resultcommand = popen(fullquery.c_str(), "r");
+
+    printNRegisters();
+
+    pclose(resultcommand); 
 }
 
 void deleteDbs(){
@@ -280,12 +297,17 @@ void deleteDbs(){
 void selectAllQuery(Database* db, Table* table){
     string query;
     string connect_command;
+    
     connect_command = connectQuery(db);
     query += connect_command + " -c \"\\copy (SELECT * FROM "+ table->tablename;
     printQuery(query, table);
-    query += ") To '../files/" + testcase_prefix +  "-" + table->tablename + "' With CSV DELIMITER ',' HEADER;\"";
-    query += "> null";
-    system(query.c_str());
+    query += ") To '../files/" + testcase_prefix +  "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
+    
+    resultcommand = popen(query.c_str(), "r");
+
+    printNRegisters();
+
+    pclose(resultcommand);
 }
 
 void recolectAllTables(string log_file){
@@ -295,5 +317,7 @@ void recolectAllTables(string log_file){
         else
             selectTracesQuery(dbs->at(i), tables->at(i), log_file);
     }
+
+    printf("%sSUCCESS:%s Se culmino la recoleccion de registros de las tablas", GRN, WHT);
 }
 
