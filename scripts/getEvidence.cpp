@@ -21,6 +21,7 @@ std::string cfg_filename;
 std::string cfgbd_filename;
 std::string input;
 std::string testcase_prefix;
+std::string log_filename;
 
 char localdate[9];
 char localtimen[7];
