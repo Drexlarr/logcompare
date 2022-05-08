@@ -1,6 +1,7 @@
 #ifndef GET_TABLES
 #define GET_TABLES
 
+#include <string>
 using namespace std;
 
 struct Database{

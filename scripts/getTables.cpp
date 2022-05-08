@@ -19,7 +19,6 @@ extern std::string testcase_prefix;
 
 int n_tables; 
 
-using namespace std;
 //Funcion que retorna el numero de tablas que se recolectaran, segun lo definido
 //por el parametro ntables en el archivo de configuracion
 int getNTables(){

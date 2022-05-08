@@ -9,6 +9,7 @@
 #include "getEvidence.h"
 #include "getTables.h"
 #include "validateLog.h"
+#include "saveEvidence.h"
 
 std::vector<Database*>* dbs;
 std::vector<Table*>* tables;
@@ -33,11 +34,13 @@ using namespace std;
 //y en caso sea especificado, tablas de base de datos antes de
 //recolectar evidencia
 int beforeRecolect(){
+
+    getenv("SIXDIR", sixdir);
     
     printf("Ingrese el nombre del archivo de configuración: ");
     cin >> input;
 
-    cfg_filename += "../cfgfiles/" + input;
+    cfg_filename =  sixdir + "/collector/cfgfiles/" + input;
 
     if(!checkIfFileExists(cfg_filename)) {
         printf("\n%sERROR:%s No se encontró el archivo de configuración, nombre o ruta inválida\n", RED, WHT);
@@ -48,7 +51,7 @@ int beforeRecolect(){
     printf("Ingrese el nombre del archivo de configuración de bd: ");
     cin >> input;
 
-    cfgbd_filename += "../bdconfig/" + input;
+    cfgbd_filename = sixdir + "/collector/bdconfig/" + input;
 
     if(!checkIfFileExists(cfgbd_filename)){
         printf("\n%sERROR:%s No se encontró el archivo de configuración de bd, nombre o ruta inválida\n", RED, WHT);
@@ -73,16 +76,21 @@ int beforeRecolect(){
 
     printf("Para iniciar con la recoleccion de evidencia, pulse una tecla cuando la ejecución de prueba haya finalizado...\n");;
 
-    cfg_filename = "";
-    cfgbd_filename = "";
     pclose(resultcommand);
     getchar();
     getchar();
     return OK;
 }
 
+int afterEvidence(){
+   prefix = testcase_prefix; 
+   return process();
+}
+
 void recolectEvidence(){    
     if(beforeRecolect() != 0) return; 
-    recolectAllTables("../files/lognuevo.log"); 
+    if(afterEvidence() != 0) return;
+    string new_log_six = path_evidence + "/" + prefix + " LOG-SIX.log";
+    recolectAllTables(new_log_six); 
     getchar();
 }

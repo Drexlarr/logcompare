@@ -47,10 +47,10 @@ const std::string ddlFormat() {
 void findLogs(std::string path, std::string launch_time){
     std::string time_param = currentDateTime();
 
-    std::string command = "find ./log -maxdepth 1 -type f -newermt \"" +
+    std::string command = "find $HOME/log -maxdepth 1 -type f -printf \"\%f\\n\" -newermt \"" +
                           launch_time + "\" -not -newermt \"" + time_param +
-                          "\"|sed 's/\\.\\/log\\///g'|grep ^log|xargs -I{} cp "
-                          "./log/{} $HOME/tmp/evidencia";
+                          "\"|grep ^log|xargs -I{} cp "
+                          "$HOME/log/{} $HOME/tmp/evidencia";
     const char *command_char = command.c_str();
     system(command_char);
 }

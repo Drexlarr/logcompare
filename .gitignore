@@ -3,3 +3,7 @@
 .vscode/
 
 a.out
+
+tmp/
+log/
+scripts/bin/

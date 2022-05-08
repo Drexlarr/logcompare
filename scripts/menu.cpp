@@ -27,7 +27,8 @@ void menu(){
             break;
         case 2:
             recolectEvidence();
-            system("clear");
+            getchar();
+            //system("clear");
             break;
         case 3:
             break;
