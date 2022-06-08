@@ -148,15 +148,15 @@ int readConfigFile(ifstream &config_file){
 				printf("%s\n", cfg_data.copies.rbegin()->c_str());
 				cfg_data.loadOptinalLog();
 				return OK;
-			} else {
-				printf("\n%sERROR%s no se encontro las copias a recuperar\n", RED, WHT);
-			}
+      } else {
+        printf("\n%sERROR%s no se encontro las copias a recuperar\n", RED, WHT);
+      }
 
-		} else {
-			printf("\n%sERROR%s no se encontro el path del log\n", RED, WHT);
-		}
+    } else {
+      printf("\n%sERROR%s no se encontro el path del log\n", RED, WHT);
+    }
   } else {
-	printf("\n%sERROR%s no se encontro el tag principal\n", RED, WHT);
+    printf("\n%sERROR%s no se encontro el tag principal\n", RED, WHT);
   }
   config_file.close();
   return BAD;
