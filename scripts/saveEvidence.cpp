@@ -2,7 +2,7 @@
 #include <ctime>
 #include <fstream>
 
-#include "saveEvidence.h"
+#include "lib/saveEvidence.h"
 
 using namespace std;
 
@@ -139,7 +139,7 @@ int getLogDDL(){
       }
     }
 
-    printf("\n  %sERROR%s al capturar el DDL", RED, WHT);
+    printf("\n  %sERROR%s al capturar el DDL\n", RED, WHT);
     return BAD;
 }
 
@@ -163,4 +163,10 @@ int process(){
     }
 
     return BAD;
+}
+
+// Retirar
+int main(int argc, char *argv[]){
+    prefix  = argv[1];
+    process();
 }
