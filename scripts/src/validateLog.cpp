@@ -1,9 +1,9 @@
 #include <string>
-#include "validateLog.h"
 #include <bits/stdc++.h>
-#include "rabin_karp.h"
-#include "values.h"
 #include <sstream>
+#include "../lib/validateLog.h"
+#include "../lib/rabin_karp.h"
+#include "../lib/values.h"
 
 std::fstream* logfile;
 std::ifstream* xmlfile;
@@ -35,7 +35,8 @@ void findLogLines(){
     int index = 1; 
 
     while (getline(*xmlfile, line)) {
-        posfound = rabin_karp("===&gt;", &line[0], 101);
+        string param = "===&gt;";
+        posfound = rabin_karp((char *)param.c_str(), &line[0], 101);
         if(posfound[99] > 0){
             writeLog(posfound[0], line, index);  
             index++;

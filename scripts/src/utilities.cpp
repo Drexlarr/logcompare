@@ -1,10 +1,8 @@
-#include "lib/utilities.h"
+#include "../lib/utilities.h"
+#include "../lib/global.h"
 
+// TODO - Retirar
 std::string date_after_launch = "2022-02-02 10:00:00";
-std::string sixdir = "";
-std::string path_evidence = "";
-std::string path_cfg = "";
-std::string prefix = "";
 
 const std::string currentDateTime() {
     time_t     now = time(0);
@@ -31,7 +29,6 @@ bool getenv(const char *name, std::string &env){
     if (ret){
         env = std::string (ret);
         path_evidence = env + "/tmp/evidencia";
-        // TEMPORAL
         path_cfg = env + "/collector/cfgfiles";
     }
     return !!ret;

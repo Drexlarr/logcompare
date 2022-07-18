@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "getEvidence.h"
-#include "values.h"
-#include "validateLog.h"
+
+#include "../lib/getEvidence.h"
+#include "../lib/values.h"
+#include "../lib/validateLog.h"
 
 using namespace std;
 

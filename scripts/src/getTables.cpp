@@ -1,8 +1,13 @@
-#include <bits/stdc++.h>
-#include "values.h"
-#include "getTables.h"
-#include "rabin_karp.h"
+#include <iostream>
+#include <vector>
+#include <fstream>
 
+#include "../lib/getTables.h"
+
+#include "../lib/values.h"
+#include "../lib/rabin_karp.h"
+
+// TODO - Pasar los extern a globals
 extern std::ifstream* cfgfile;
 extern std::ifstream* cfgbdfile;
 extern FILE* resultcommand;
@@ -27,11 +32,11 @@ int getNTables(){
     string number;
     char* linen;
     int ntabl;
-    while(getline(*cfgfile, line)){
+    while(std::getline(*cfgfile, line)){
         if(line.find(bdtag) != std::string::npos)
             break;
     }    
-    getline(*cfgfile, line);
+    std::getline(*cfgfile, line);
 
     number = line.substr(line.find("=")+1);
 
@@ -44,13 +49,13 @@ void getTableParameters(Table* table){
     string parameter;
     string line;
     int needed = 0;
-    while(getline(*cfgfile, line)){     
+    while(std::getline(*cfgfile, line)){     
         if(line.find("[") == 0) {
             break;
         }
     } 
 
-    while(getline(*cfgfile, line)){
+    while(std::getline(*cfgfile, line)){
         if(line.size() == 0) break;
 
         if(table->deltable == "Y" && needed == 3) break;
@@ -102,7 +107,7 @@ void getCredentialsBD(string database, Database* DB){
     
     string db(buffer);
 
-    while(getline(*cfgbdfile, line)){     
+    while(std::getline(*cfgbdfile, line)){     
         if(line.find(db) != std::string::npos) {
             bd_exists = true;
             break;
@@ -114,7 +119,7 @@ void getCredentialsBD(string database, Database* DB){
         return;
     }
 
-    while(getline(*cfgbdfile, line)){
+    while(std::getline(*cfgbdfile, line)){
         if(line.size() == 0) break;
 
         parameter = line.substr(0, line.find("="));
@@ -201,7 +206,7 @@ void getTracesFromLog(string log_file, Table* table){
 
     traces = new vector<string>;
 
-    while(getline(*flog, line)){
+    while(std::getline(*flog, line)){
         if(line.find("B0" + table->tracefield + "[") != string::npos){
             aux = line.find("B0" + table->tracefield + "[");
             if(!isInTraces(line.substr(aux + 5, 6))){

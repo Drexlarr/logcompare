@@ -1,9 +1,6 @@
 #ifndef SAVE_EVIDENCE_H
 #define SAVE_EVIDENCE_H
 
-#include "values.h"
-#include "saveOptionalLog.h"
-
 int system(const char *__command);
 
 // Función que crea el directorio donde se guardará la evidencia

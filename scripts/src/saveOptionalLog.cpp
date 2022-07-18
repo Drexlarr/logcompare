@@ -3,9 +3,11 @@
 #include <fstream>
 #include <vector>
 
-#include "lib/saveOptionalLog.h"
-#include "lib/utilities.h"
-#include "lib/values.h"
+#include "../lib/saveOptionalLog.h"
+
+#include "../lib/utilities.h"
+#include "../lib/values.h"
+#include "../lib/global.h"
 
 using namespace std;
 
@@ -179,7 +181,6 @@ int openConfigFile(string config_path) {
 }
 
 int getOptionalLog() {
-  // Comenzando Función
   string option;
   do {
     printf("- Desea obtener logs opcionales [y/n]: ");

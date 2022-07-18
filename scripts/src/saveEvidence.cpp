@@ -2,12 +2,14 @@
 #include <ctime>
 #include <fstream>
 
-#include "lib/saveEvidence.h"
+#include "../lib/saveEvidence.h"
+#include "../lib/values.h"
+#include "../lib/saveOptionalLog.h"
+#include "../lib/global.h"
 
 using namespace std;
 
 int createDirEvidence(){
-    // Comienza la función
     printf("- Se ha creado la carpeta en: %s%s%s\n", CYN, path_evidence.c_str(), WHT);
 
     // Borramos la evidencia anterior
@@ -20,7 +22,6 @@ int createDirEvidence(){
 }
 
 int renameLogSix(string prefix){
-    // Comienza la función
     string mensaje = "\n- Se renombra el Log del SIX a: " + prefix + " LOG-SIX.log\n";
     printf("%s", mensaje.c_str());
     string command = "ls " + path_evidence + " | xargs -I{} mv " +
@@ -30,8 +31,6 @@ int renameLogSix(string prefix){
 }
 
 int deleteAnotherLogs(){
-    // Comienza la función
-    
     // Realizamos diferentes acciones dependiendo la cantidad de 
     // Log que encuentre
     fstream outputFile;
@@ -90,7 +89,6 @@ int deleteAnotherLogs(){
 }
 
 int getLogSix(){
-    // Comienza la función
     printf("- Recolectando el Log del SIX\n");
 
     string command =
@@ -113,7 +111,6 @@ int getLogSix(){
 }
 
 int getLogDDL(){
-    // Comienza la función
     printf("- Recolectando el log del ddl\n");
     string ddl_file = sixdir + "/log/ddl/" + ddlFormat();
 
@@ -167,6 +164,6 @@ int process(){
 
 // Retirar
 int main(int argc, char *argv[]){
-    prefix  = argv[1];
+    prefix = argv[1];
     process();
 }

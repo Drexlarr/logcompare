@@ -1,6 +1,6 @@
 #include <stdio.h> 
 #include <string.h>
-#include "rabin_karp.h"
+#include "../lib/rabin_karp.h"
 
 #define d 256
  

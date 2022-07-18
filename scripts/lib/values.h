@@ -77,13 +77,10 @@
 #define CRESET "\e[0m"
 #define COLOR_RESET "\e[0m"
 
-
 #define CFG_FILE_DOESNT_EXIST  11;
 #define CFG_BD_FILE_DOESNT_EXIST  12;
 
-
 #define OK  0;
 #define BAD 1;
-
 
 #endif

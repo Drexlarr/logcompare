@@ -5,11 +5,15 @@
 #include <vector>
 #include <stdlib.h>
 #include <unistd.h>
-#include "values.h"
-#include "getEvidence.h"
-#include "getTables.h"
-#include "validateLog.h"
-#include "saveEvidence.h"
+
+#include "../lib/getEvidence.h"
+
+#include "../lib/global.h"
+#include "../lib/utilities.h"
+#include "../lib/values.h"
+#include "../lib/getTables.h"
+#include "../lib/validateLog.h"
+#include "../lib/saveEvidence.h"
 
 std::vector<Database*>* dbs;
 std::vector<Table*>* tables;
