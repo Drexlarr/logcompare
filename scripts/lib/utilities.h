@@ -10,6 +10,6 @@ const std::string currentDateTime();
 const std::string ddlFormat();
 
 // Función que obtiene la ruta del six
-bool getenv(const char* name, std::string &env);
+bool getMainDir(const char* name);
 
 #endif

@@ -2,6 +2,6 @@
 #define GET_EVIDENCE
 
 int beforeDelete();
-void recolectEvidence();
+int recolectEvidence();
 
 #endif

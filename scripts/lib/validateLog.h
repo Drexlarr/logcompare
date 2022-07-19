@@ -1,7 +1,7 @@
 #ifndef VALIDATE_LOG
 #define VALIDATE_LOG    
-#include <string>
 
+#include <string>
 
 bool checkIfFileExists(std::string filename);
 void writeLog(int pos, std::string line);

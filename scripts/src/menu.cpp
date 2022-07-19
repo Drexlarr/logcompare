@@ -27,13 +27,14 @@ void menu(){
             system("clear");
             break;
         case 2:
-            recolectEvidence();
-            getchar();
-            //system("clear");
+            if (recolectEvidence() != 0){
+                choice = 3;
+            }
             break;
         case 3:
             break;
         default:
+            system("clear");
             break;
         }
     } while(choice != 3);

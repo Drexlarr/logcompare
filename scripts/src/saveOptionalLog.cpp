@@ -164,8 +164,8 @@ int readConfigFile(ifstream &config_file){
   return BAD;
 }
 
-int openConfigFile(string config_path) {
-  ifstream config_file(config_path);
+int openConfigFile() {
+  ifstream config_file(cfg_log);
 
   if (config_file.fail()) {
     printf("%sERROR%s No se encontró el archivo de configuracion\n\n", RED,
@@ -191,19 +191,7 @@ int getOptionalLog() {
     return OK;
   }
 
-  string command;
-  string cfg_file;
-
-  do {
-    printf("- Ingrese el nombre del archivo: ");
-    cin >> cfg_file;
-
-    command = "if [ -e " + path_cfg + "/" + cfg_file +
-              " ]; then return 0; else return 1; fi";
-
-  } while (cfg_file == "" || system(command.c_str()));
-
   printf("- Recuperando Logs opcionales\n");
 
-  return openConfigFile(path_cfg + "/" + cfg_file);
+  return openConfigFile();
 }

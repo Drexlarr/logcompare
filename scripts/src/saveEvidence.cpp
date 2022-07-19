@@ -143,13 +143,6 @@ int getLogDDL(){
 int process(){
     printf("\nRECOLECTANDO EVIDENCIA\n\n");
     
-    // Verificamos si existe la variable de entorno SIXDIR
-    if (!getenv("SIXDIR", sixdir)) {
-      printf("  %sERROR%s La variable de entorno %sSIXDIR%s no existe\n", RED,
-             WHT, YEL, WHT);
-      return BAD;
-    }
-
     if (!createDirEvidence()) {
       if (!getLogSix()) {
         if(!getLogDDL()){
@@ -160,10 +153,4 @@ int process(){
     }
 
     return BAD;
-}
-
-// Retirar
-int main(int argc, char *argv[]){
-    prefix = argv[1];
-    process();
 }

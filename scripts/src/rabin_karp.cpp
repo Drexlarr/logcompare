@@ -4,7 +4,6 @@
 
 #define d 256
  
-
 int* rabin_karp(char* pat, char* txt, int q){
     int M, N; 
     if(txt[strlen(txt) - 1] == '\n') N = strlen(txt) - 1;

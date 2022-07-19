@@ -9,3 +9,7 @@ std::string sixdir;
 std::string path_evidence;
 
 std::string path_cfg;
+
+std::string cfg_log;
+
+std::string cfg_bd;

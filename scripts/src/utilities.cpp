@@ -1,9 +1,6 @@
 #include "../lib/utilities.h"
 #include "../lib/global.h"
 
-// TODO - Retirar
-std::string date_after_launch = "2022-02-02 10:00:00";
-
 const std::string currentDateTime() {
     time_t     now = time(0);
     struct tm  tstruct;
@@ -24,12 +21,12 @@ const std::string ddlFormat() {
     return buf;
 }
 
-bool getenv(const char *name, std::string &env){
+bool getMainDir(const char *name){
     const char *ret = getenv(name);
     if (ret){
-        env = std::string (ret);
-        path_evidence = env + "/tmp/evidencia";
-        path_cfg = env + "/collector/cfgfiles";
+        sixdir = std::string (ret);
+        path_evidence = sixdir + "/tmp/evidencia";
+        path_cfg = sixdir + "/collector/cfgfiles";
     }
     return !!ret;
 }

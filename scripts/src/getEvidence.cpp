@@ -22,52 +22,50 @@ std::ifstream* cfgfile;
 std::ifstream* cfgbdfile;
 FILE* resultcommand;
 
-std::string cfg_filename;
-std::string cfgbd_filename;
 std::string input;
-std::string testcase_prefix;
-std::string log_filename;
 
 char localdate[9];
 char localtimen[7];
 
 using namespace std;
 
-
 //En esta función se realizan carga de archivos y limpieza de logs,
 //y en caso sea especificado, tablas de base de datos antes de
 //recolectar evidencia
 int beforeRecolect(){
 
-    getenv("SIXDIR", sixdir);
+    // Verificamos si existe la variable de entorno SIXDIR
+    if (!getMainDir("SIXDIR")) {
+      printf("  %sERROR%s La variable de entorno %sSIXDIR%s no existe\n", RED,
+             WHT, YEL, WHT);
+      return BAD;
+    }
     
     printf("Ingrese el nombre del archivo de configuración: ");
     cin >> input;
 
-    cfg_filename =  sixdir + "/collector/cfgfiles/" + input;
+    cfg_log =  path_cfg + "/" + input;
 
-    if(!checkIfFileExists(cfg_filename)) {
+    if(!checkIfFileExists(cfg_log)) {
         printf("\n%sERROR:%s No se encontró el archivo de configuración, nombre o ruta inválida\n", RED, WHT);
-        sleep(1);
         return CFG_FILE_DOESNT_EXIST; 
     }
 
     printf("Ingrese el nombre del archivo de configuración de bd: ");
     cin >> input;
 
-    cfgbd_filename = sixdir + "/collector/bdconfig/" + input;
+    cfg_bd = path_cfg + "/" + input;
 
-    if(!checkIfFileExists(cfgbd_filename)){
+    if(!checkIfFileExists(cfg_bd)){
         printf("\n%sERROR:%s No se encontró el archivo de configuración de bd, nombre o ruta inválida\n", RED, WHT);
-        sleep(1);
         return CFG_BD_FILE_DOESNT_EXIST; 
     }
 
-    initParameters(cfg_filename, cfgbd_filename);
+    initParameters(cfg_log, cfg_bd);
 
     printf("Ingrese el codigo del caso de prueba: ");
 
-    cin >> testcase_prefix;
+    cin >> prefix;
 
     resultcommand = popen("echo $(date +'%Y%m%d') && echo $(date +'%H%M%S')", "r");
 
@@ -78,23 +76,27 @@ int beforeRecolect(){
 
     deleteDbs();
 
-    printf("Para iniciar con la recoleccion de evidencia, pulse una tecla cuando la ejecución de prueba haya finalizado...\n");;
-
     pclose(resultcommand);
-    getchar();
-    getchar();
+
+    printf("Después de lanzar la trama, pulse cualquier tecla para capturar Evidencia\n");
+
+    char wait;
+    scanf("%c", &wait);
+    date_after_launch = currentDateTime();
+
     return OK;
 }
 
 int afterEvidence(){
-   prefix = testcase_prefix; 
    return process();
 }
 
-void recolectEvidence(){    
-    if(beforeRecolect() != 0) return; 
-    if(afterEvidence() != 0) return;
+int recolectEvidence(){    
+    if(beforeRecolect() != 0) return BAD; 
+    if(afterEvidence() != 0) return BAD;
     string new_log_six = path_evidence + "/" + prefix + " LOG-SIX.log";
     recolectAllTables(new_log_six); 
     getchar();
+
+    return OK;
 }

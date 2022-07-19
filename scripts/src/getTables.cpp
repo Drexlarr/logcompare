@@ -6,6 +6,7 @@
 
 #include "../lib/values.h"
 #include "../lib/rabin_karp.h"
+#include "../lib/global.h"
 
 // TODO - Pasar los extern a globals
 extern std::ifstream* cfgfile;
@@ -19,7 +20,6 @@ extern std::vector<Table*>* tables;
 
 extern char localtimen[7];
 extern char localdate[9];
-extern std::string testcase_prefix;
 
 
 int n_tables; 
@@ -281,7 +281,7 @@ void selectTracesQuery(Database* db, Table* table, string log_file){
 
     printQuery(fullquery, table);
 
-    fullquery += ") To '../files/" + testcase_prefix +  "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";    
+    fullquery += ") To '../files/" + prefix +  "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";    
 
     resultcommand = popen(fullquery.c_str(), "r");
 
@@ -305,7 +305,7 @@ void selectAllQuery(Database* db, Table* table){
     connect_command = connectQuery(db);
     query += connect_command + " -c \"\\copy (SELECT * FROM "+ table->tablename;
     printQuery(query, table);
-    query += ") To '../files/" + testcase_prefix +  "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
+    query += ") To '../files/" + prefix +  "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
     
     resultcommand = popen(query.c_str(), "r");
 
