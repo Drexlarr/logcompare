@@ -4,21 +4,21 @@
 #include <string>
 using namespace std;
 
-struct Database{
-   string host;
-   string port;
-   string user;
-   string password;
+struct Database {
+    string host;
+    string port;
+    string user;
+    string password;
 };
 
-struct Table{
-   string tablename;
-   string database;
-   string deltable;
-   string tracefield;
-   string columntrace;
-   string columntime;
-   string columndate;
+struct Table {
+    string tablename;
+    string database;
+    string deltable;
+    string tracefield;
+    string columntrace;
+    string columntime;
+    string columndate;
 };
 
 int getNTables();
@@ -34,8 +34,8 @@ int removeDuplicate(int n_traces);
 void selectTracesQuery(Database* db, Table* table, string log_file);
 bool isInTraces(string probtrace);
 void deleteDbs();
+void prinNRegisters();
 void recolectAllTables(string log_file);
 void printQuery(string fullquery, Table* table);
-void prinNRegisters();
 
 #endif
