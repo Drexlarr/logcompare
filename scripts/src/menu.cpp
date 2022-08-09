@@ -30,6 +30,7 @@ void menu(){
             if (recolectEvidence() != 0){
                 choice = 3;
             }
+            system("clear");
             break;
         case 3:
             break;

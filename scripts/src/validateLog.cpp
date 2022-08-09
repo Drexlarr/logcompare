@@ -1,7 +1,10 @@
-#include <string>
-#include <bits/stdc++.h>
-#include <sstream>
 #include "../lib/validateLog.h"
+
+#include <bits/stdc++.h>
+
+#include <sstream>
+#include <string>
+
 #include "../lib/rabin_karp.h"
 #include "../lib/values.h"
 
@@ -13,59 +16,58 @@ std::fstream* dirtyxmlfile;
 
 using namespace std;
 
-bool checkIfFileExists(string filename){
-    ifstream *file = new ifstream(filename.c_str());
+bool checkIfFileExists(string filename) {
+    ifstream* file = new ifstream(filename.c_str());
     return file->good();
 }
 
-void writeLog(int pos, string line, int index){
+void writeLog(int pos, string line, int index) {
     *inputfile << index << ". ===>";
-    for(int i = pos+7; i < line.size(); i++){
-        if(line[i] == '<') break;
+    for (int i = pos + 7; i < line.size(); i++) {
+        if (line[i] == '<') break;
         *inputfile << line[i];
-    } 
+    }
     *inputfile << endl;
 }
 
-void findLogLines(){ 
+void findLogLines() {
     string line;
     char* lineaux;
-    int* posfound; 
+    int* posfound;
     int ocd;
-    int index = 1; 
+    int index = 1;
 
     while (getline(*xmlfile, line)) {
         string param = "===&gt;";
-        posfound = rabin_karp((char *)param.c_str(), &line[0], 101);
-        if(posfound[99] > 0){
-            writeLog(posfound[0], line, index);  
+        posfound = rabin_karp((char*)param.c_str(), &line[0], 101);
+        if (posfound[99] > 0) {
+            writeLog(posfound[0], line, index);
             index++;
         }
     }
 }
-    
-string getProcessName(string line){
+
+string getProcessName(string line) {
     string pname;
 
-    for(int i = 0; i < 10; i++)
-        pname += line[42+i];
+    for (int i = 0; i < 10; i++)
+        pname += line[42 + i];
 
     return pname;
 }
 
-void compFiles(){
-    
+void compFiles() {
     string linelog;
     string lineinput;
-    int* arr; 
-    int ocd; 
+    int* arr;
+    int ocd;
     string process_name;
     string aux;
     string notfound;
     int ntfound = 0;
     int count = 1;
-	stringstream ss;
-	string auxstr;
+    stringstream ss;
+    string auxstr;
 
     while (getline(*inputfile, lineinput)) {
         logfile->clear();
@@ -73,36 +75,36 @@ void compFiles(){
         ocd = 0;
         *resultfile << lineinput << endl;
         while (getline(*logfile, linelog)) {
-            arr = rabin_karp(&lineinput.substr(lineinput.find(".")+1)[0], &linelog[0], 101);
-            ocd += arr[99];       
-            if (arr[99] > 0){
+            arr = rabin_karp(&lineinput.substr(lineinput.find(".") + 1)[0], &linelog[0], 101);
+            ocd += arr[99];
+            if (arr[99] > 0) {
                 process_name = getProcessName(linelog);
                 *resultfile << " ---------- HALLADO - NOMBRE DEL PROCESO \t\t" << process_name << endl;
             }
         }
-        if(ocd) *resultfile << endl;
-        if(!ocd){
+        if (ocd) *resultfile << endl;
+        if (!ocd) {
             ntfound++;
-			ss << count;
-			auxstr = ss.str();
+            ss << count;
+            auxstr = ss.str();
             notfound += auxstr + ", ";
             ss.str("");
-            *resultfile << " ---------- NO HALLADO" << endl << endl;
+            *resultfile << " ---------- NO HALLADO" << endl
+                        << endl;
         }
         count++;
     }
 
-    if(notfound.size() == 0)
+    if (notfound.size() == 0)
         printf("%sSUCCESS%s: Se encontraron %d de %d lineas de log\n", GRN, WHT, count, count);
 
-    else{
+    else {
         printf("%sWARNING%s: No se encontraron %d de %d lineas de log\n", YEL, WHT, ntfound, count);
-        printf("\t%s**%s No se encontraron las siguientes lineas de log %s(%s)%s. Los indices pueden ser encontrados en el archivo results.txt\n", BLU, WHT, BLU,  notfound.substr(0, notfound.size()-2).c_str(), WHT);
+        printf("\t%s**%s No se encontraron las siguientes lineas de log %s(%s)%s. Los indices pueden ser encontrados en el archivo results.txt\n", BLU, WHT, BLU, notfound.substr(0, notfound.size() - 2).c_str(), WHT);
     }
-     
 }
 
-void clearXmlFile(string dirtyxmlfile_name){
+void clearXmlFile(string dirtyxmlfile_name) {
     string line;
     string command;
     FILE* results;
@@ -111,37 +113,37 @@ void clearXmlFile(string dirtyxmlfile_name){
     int aux = 0;
     int count = 0;
     bool completedivs = false;
-	stringstream ss;
-	string auxstr;
+    stringstream ss;
+    string auxstr;
     command = "sed '1,/<expectedresults>/d' '" + dirtyxmlfile_name + "' > ../files/clear.xml";
     system(command.c_str());
-	system("sed -i 's/&nbsp;/ /g' ../files/clear.xml");
-	system("sed -i 's/ </</g' ../files/clear.xml");
-	system("sed -i \"s,/ol,-ol,\" ../files/clear.xml");
-    
+    system("sed -i 's/&nbsp;/ /g' ../files/clear.xml");
+    system("sed -i 's/ </</g' ../files/clear.xml");
+    system("sed -i \"s,/ol,-ol,\" ../files/clear.xml");
+
     xmlfile->close();
 
     xmlfile->open("../files/clear.xml");
     results = popen("grep -o '<ol start' ../files/clear.xml | wc -l", "r");
 
-    fgets(numberdivs,3, results);
+    fgets(numberdivs, 3, results);
     divs = atoi(numberdivs);
 
-    if(divs == 0)
+    if (divs == 0)
         system("sed -i \"/-ol>/Q\" ../files/clear.xml");
 
-    else{
-        while(getline(*xmlfile, line)){
+    else {
+        while (getline(*xmlfile, line)) {
             count++;
-            if(line.find("<ol start") != string::npos)
+            if (line.find("<ol start") != string::npos)
                 aux++;
 
-            if(aux == divs) completedivs = true;
+            if (aux == divs) completedivs = true;
 
-            if(completedivs && line == "<-ol>"){
+            if (completedivs && line == "<-ol>") {
                 count++;
-				ss << count;
-				ss >> auxstr;
+                ss << count;
+                ss >> auxstr;
                 command = "sed -i '" + auxstr + "'',$d' ../files/clear.xml";
                 system(command.c_str());
                 break;
@@ -151,15 +153,15 @@ void clearXmlFile(string dirtyxmlfile_name){
     xmlfile->close();
 }
 
-void validateLog(){
+void validateLog() {
     string logfile_name;
     string dirtyxmlfile_name;
 
-    printf("Ingrese el nombre del archivo xml: "); 
+    printf("Ingrese el nombre del archivo xml: ");
     cin >> dirtyxmlfile_name;
     dirtyxmlfile_name = "../files/" + dirtyxmlfile_name;
 
-    if(!checkIfFileExists(dirtyxmlfile_name)){
+    if (!checkIfFileExists(dirtyxmlfile_name)) {
         printf("%sERROR:%s No se encontró el archivo, nombre o ruta invalida", RED, WHT);
         return;
     }
@@ -168,7 +170,7 @@ void validateLog(){
     cin >> logfile_name;
     logfile_name = "../files/" + logfile_name;
 
-    if(!checkIfFileExists(dirtyxmlfile_name)){
+    if (!checkIfFileExists(dirtyxmlfile_name)) {
         printf("%sERROR:%s No se encontró el archivo, nombre o ruta invalida", RED, WHT);
         return;
     }
@@ -196,4 +198,3 @@ void validateLog(){
     resultfile->close();
     logfile->close();
 }
-
