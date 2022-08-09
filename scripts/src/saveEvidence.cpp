@@ -146,7 +146,7 @@ int process(){
     if (!createDirEvidence()) {
       if (!getLogSix()) {
         if(!getLogDDL()){
-            if(!getOptionalLog())
+            if(!loadOptionalLog())
                 return OK;
         }
       }

@@ -14,6 +14,7 @@
 #include "../lib/getTables.h"
 #include "../lib/validateLog.h"
 #include "../lib/saveEvidence.h"
+#include "../lib/saveOptionalLog.h"
 
 std::vector<Database*>* dbs;
 std::vector<Table*>* tables;
@@ -51,6 +52,11 @@ int beforeRecolect(){
         return CFG_FILE_DOESNT_EXIST; 
     }
 
+    if(getOptionalLog()){
+        printf("\n%sERROR:%s No se pudo encontrar los archivos opcionales\n", RED, WHT);
+        return BAD;
+    }
+
     printf("Ingrese el nombre del archivo de configuración de bd: ");
     cin >> input;
 
@@ -78,11 +84,12 @@ int beforeRecolect(){
 
     pclose(resultcommand);
 
+    date_after_launch = currentDateTime();
+
     printf("Después de lanzar la trama, pulse cualquier tecla para capturar Evidencia\n");
 
-    char wait;
-    scanf("%c", &wait);
-    date_after_launch = currentDateTime();
+    getchar();
+    getchar();
 
     return OK;
 }
