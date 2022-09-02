@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "../lib/getEvidence.h"
 #include "../lib/values.h"
@@ -28,6 +29,7 @@ void menu(){
             break;
         case 2:
             if (recolectEvidence() != 0){
+                sleep(5);
                 choice = 3;
             }
             system("clear");

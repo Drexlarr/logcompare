@@ -93,9 +93,10 @@ int getLogSix(){
 
     string command =
         "find " + sixdir +
-        "/log -maxdepth 1 -type f -printf \"\%f\\n\" -newermt \"" +
+        "/log -maxdepth 1 -type f -newermt \"" +
         date_after_launch + "\" -not -newermt \"" + currentDateTime() +
-        "\"|grep ^log | xargs -I {} cp " + sixdir + "/log/{} " + path_evidence +
+        "\"|grep -v ^six | awk -F '/' '{print $(NF)}' | xargs -I {} cp " + 
+        sixdir + "/log/{} " + path_evidence +
         " && ls -1 " + path_evidence + " | wc -l > ./.outputFile.txt";
 
     if (!system(command.c_str())) {
@@ -146,7 +147,7 @@ int process(){
     if (!createDirEvidence()) {
       if (!getLogSix()) {
         if(!getLogDDL()){
-            if(!loadOptionalLog())
+            if(!getOptionalLog())
                 return OK;
         }
       }
