@@ -13,3 +13,5 @@ std::string path_cfg;
 std::string cfg_log;
 
 std::string cfg_bd;
+
+int optional_log;

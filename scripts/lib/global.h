@@ -24,4 +24,8 @@ extern std::string cfg_log;
 // variable que contiene la ruta y nombre del archivo cfg bd
 extern std::string cfg_bd;
 
+// variable que almacena la desicion del usuario sobre si recolectar el log opcional
+// (0: No se hará recolección - 1: Se hará recolección)
+extern int optional_log;
+
 #endif // !GLOBAL_H

@@ -195,10 +195,12 @@ int getOptionalLog() {
   } while (option != "Y" && option != "y" && option != "n" && option != "N");
 
   if (option != "Y" && option != "y") {
+      optional_log = 0;
     return OK;
   }
 
   printf("- Listando Logs opcionales\n");
 
+  optional_log = 1;
   return openConfigFile();
 }

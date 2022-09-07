@@ -78,7 +78,7 @@ int deleteAnotherLogs(){
         cin >> log_name;
     
         command = "if [ -e \"" + path_evidence + "/" + log_name +
-                  "\" ]; then return 0; else return 1; fi";
+                  "\" ]; then exit 0; else exit 1; fi";
     
     } while(system(command.c_str()));
 
@@ -95,7 +95,7 @@ int getLogSix(){
         "find " + sixdir +
         "/log -maxdepth 1 -type f -newermt \"" +
         date_after_launch + "\" -not -newermt \"" + currentDateTime() +
-        "\"|grep -v ^six | awk -F '/' '{print $(NF)}' | xargs -I {} cp " + 
+        "\"|grep -v six | awk -F '/' '{print $(NF)}' | xargs -I {} cp " + 
         sixdir + "/log/{} " + path_evidence +
         " && ls -1 " + path_evidence + " | wc -l > ./.outputFile.txt";
 
@@ -116,7 +116,7 @@ int getLogDDL(){
     string ddl_file = sixdir + "/log/ddl/" + ddlFormat();
 
     // Verificamos si exsite el archivo DDL
-    string command = "if [ -e " + ddl_file + " ]; then return 0; else return 1; fi";
+    string command = "if [ -e " + ddl_file + " ]; then exit 0; else exit 1; fi";
 
     // Si existe el ddl
     if (!system(command.c_str())) {
@@ -147,8 +147,12 @@ int process(){
     if (!createDirEvidence()) {
       if (!getLogSix()) {
         if(!getLogDDL()){
-            if(!getOptionalLog())
-                return OK;
+            if(optional_log){
+                if(!loadOptionalLog()){
+                    return OK;
+                }else return BAD;
+            }
+            return OK;
         }
       }
     }

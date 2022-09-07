@@ -26,7 +26,7 @@ bool getMainDir(const char *name){
     if (ret){
         sixdir = std::string (ret);
         path_evidence = sixdir + "/tmp/evidencia";
-        path_cfg = sixdir + "/collector/cfgfiles";
+        path_cfg = sixdir + "/binappl/collector/cfgfiles";
     }
     return !!ret;
 }

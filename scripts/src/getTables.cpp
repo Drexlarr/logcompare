@@ -297,11 +297,10 @@ void selectAllQuery(Database* db, Table* table) {
     connect_command = connectQuery(db);
     query += connect_command + " -c \"\\copy (SELECT * FROM " + table->tablename;
     printQuery(query, table);
-    query += ") To '../files/" + prefix + "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
+    query += ") To '" + path_evidence + "/" + prefix + " " + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
 
     resultcommand = popen(query.c_str(), "r");
 
-    cout << "hola\n\n";
     printNRegisters();
 
     pclose(resultcommand);

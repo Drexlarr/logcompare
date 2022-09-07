@@ -97,7 +97,6 @@ int recolectEvidence() {
         return BAD;
     string new_log_six = path_evidence + "/" + prefix + " LOG-SIX.log";
     recolectAllTables(new_log_six);
-    cout << "La culpa es de raúl\n";
     getchar();
 
     return OK;
