@@ -12,14 +12,24 @@ void menu(){
     int choice = 0;
     system("clear");
     do {
-        printf("%s#########################\n", WHT);
-        printf("#    FIND RECOLECTOR    #\n");
-        printf("#########################\n");
-        printf("                         \n");
-        printf("1. Validar Flujo         \n");
-        printf("2. Recolectar Evidencia  \n");
-        printf("3. Salir                 \n");
-        printf("Ingrese una opción: ");
+        printf("+--------------------------------------------------------+\n");
+        printf("|                                                        |\n");
+        printf("|               LOG RECOLECTOR & VALIDATOR               |\n");
+        printf("|                                                        |\n");
+        printf("+--------------------------------------------------------+\n");
+        printf("|                                                        |\n");
+        printf("|                                                        |\n");
+        printf("|                  1. Validar Log                        |\n");
+        printf("|                                                        |\n");
+        printf("|                                                        |\n");
+        printf("|                  2. Recolectar Evidencias              |\n");
+        printf("|                                                        |\n");
+        printf("|                                                        |\n");
+        printf("|                  3. Salir                              |\n");
+        printf("|                                                        |\n");
+        printf("|                                                        |\n");
+        printf("+--------------------------------------------------------+\n");
+        printf("                   Opción: ");
         scanf("%d", &choice);
 
         switch (choice){
@@ -29,9 +39,9 @@ void menu(){
             break;
         case 2:
             if (recolectEvidence() != 0){
-                sleep(5);
                 choice = 3;
             }
+            sleep(5);
             system("clear");
             break;
         case 3:
