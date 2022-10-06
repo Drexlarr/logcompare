@@ -10,14 +10,15 @@
 using namespace std;
 
 int createDirEvidence(){
-    printf("- Se ha creado la carpeta en: %s%s%s\n", CYN, path_evidence.c_str(), WHT);
-
     // Borramos la evidencia anterior
     string command = "rm -rf " + path_evidence;
     system(command.c_str());
 
     // Creamos la nueva carpeta evidencia
-    command = "mkdir " + path_evidence;
+    path_evidence += "/" + prefix;
+    command = "mkdir -p " + path_evidence;
+
+    printf("- Se ha creado la carpeta en: %s%s%s\n", CYN, path_evidence.c_str(), WHT);
     return system(command.c_str());
 }
 
@@ -95,10 +96,10 @@ int getLogSix(){
         "find " + sixdir +
         "/log -maxdepth 1 -type f -newermt \"" +
         date_after_launch + "\" -not -newermt \"" + currentDateTime() +
-        "\"|grep -v six | awk -F '/' '{print $(NF)}' | xargs -I {} cp " + 
+        "\"|grep -v six | awk -F \'/\' \'{print $(NF)}\' | xargs -I {} cp " + 
         sixdir + "/log/{} " + path_evidence +
         " && ls -1 " + path_evidence + " | wc -l > ./.outputFile.txt";
-
+    
     if (!system(command.c_str())) {
       if (!deleteAnotherLogs()) {
         int rsp = renameLogSix(prefix);
