@@ -1,0 +1,15 @@
+CC=gcc
+CFLAGS=-std=c++11
+SOURCE=./src/menu.cpp ./src/validateLog.cpp ./src/rabin_karp.cpp \
+    ./src/getEvidence.cpp ./src/saveEvidence.cpp ./src/utilities.cpp \
+    ./src/saveOptionalLog.cpp ./src/getTables.cpp ./src/global.cpp
+MENU=menu
+BIN_PATH=../bin/
+
+all: $(SOURCE) $(MENU)
+
+$(MENU):
+        $(CC) $(SOURCE) -o $@
+
+%.o: %.c
+        $(CC) $(CFLAGS) $< -o $@
