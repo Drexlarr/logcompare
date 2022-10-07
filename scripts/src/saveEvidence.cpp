@@ -96,7 +96,7 @@ int getLogSix(){
         "find " + sixdir +
         "/log -maxdepth 1 -type f -newermt \"" +
         date_after_launch + "\" -not -newermt \"" + currentDateTime() +
-        "\"|grep -v six | awk -F \'/\' \'{print $(NF)}\' | xargs -I {} cp " + 
+        "\"|grep -v six | awk -F '/' \'{print $(NF)}\' | xargs -I {} cp " + 
         sixdir + "/log/{} " + path_evidence +
         " && ls -1 " + path_evidence + " | wc -l > ./.outputFile.txt";
     
