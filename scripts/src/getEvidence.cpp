@@ -25,7 +25,6 @@ std::ifstream *cfgfile;
 std::ifstream *cfgbdfile;
 FILE *resultcommand;
 
-std::string input;
 
 char localdate[9];
 char localtimen[7];
@@ -36,29 +35,10 @@ using namespace std;
 // y en caso sea especificado, tablas de base de datos antes de
 // recolectar evidencia
 int beforeRecolect() {
-    printf("\n- Ingrese el nombre del archivo de configuración: ");
-    cin >> input;
-
-    cfg_log = path_cfg + "/" + input;
-
-    if (!checkIfFileExists(cfg_log)) {
-        printf("\n%sERROR:%s No se encontró el archivo de configuración, nombre o ruta inválida\n", RED, WHT);
-        return CFG_FILE_DOESNT_EXIST;
-    }
 
     if(getOptionalLog()){
         printf("\n%sERROR:%s No se pudo encontrar los archivos opcionales\n", RED, WHT);
         return BAD;
-    }
-
-    printf("- Ingrese el nombre del archivo de configuración de bd: ");
-    cin >> input;
-
-    cfg_bd = path_cfg + "/" + input;
-
-    if (!checkIfFileExists(cfg_bd)) {
-        printf("\n%sERROR:%s No se encontró el archivo de configuración de bd, nombre o ruta inválida\n", RED, WHT);
-        return CFG_BD_FILE_DOESNT_EXIST;
     }
 
     initParameters(cfg_log, cfg_bd);

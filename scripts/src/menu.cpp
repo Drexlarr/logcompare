@@ -11,6 +11,35 @@
 
 using namespace std;
 
+void config_files(){
+    if (!getMainDir("SIXDIR")) {
+        printf("%sERROR%s La variable de entorno %sSIXDIR%s no existe\n", RED,
+               WHT, YEL, WHT);
+        return;
+    }
+
+    std::string input;
+    printf("\nIngrese el nombre del archivo de configuracion: ");
+    cin >> input;
+
+    cfg_log = path_cfg + "/" + input;
+
+    if(!checkIfFileExists(cfg_log)){
+        printf("\n%sERROR:%s No se pudo encontrar los archivos opcionales\n", RED, WHT);
+        return;
+    }
+    
+    printf("Ingrese el nombre del archivo de configuracion de bd: ");
+    cin >> input;
+
+    cfg_bd = path_cfg + "/" + input;
+
+    if(!checkIfFileExists(cfg_bd)){
+        printf("\n%sERROR:%s No se encontro el archivo de configuracion de bd, nombre o ruta invalida\n", RED, WHT);
+        return;
+    }
+}
+
 void menu(){
 
     int choice = 0;
@@ -26,24 +55,26 @@ void menu(){
             return;
         }
 
-        printf("+--------------------------------------------------------+\n");
-        printf("|                                                        |\n");
-        printf("|               LOG RECOLECTOR & VALIDATOR               |\n");
-        printf("|                                                        |\n");
-        printf("+--------------------------------------------------------+\n");
-        printf("|                                                        |\n");
-        printf("|          Ingrese el codigo del caso de prueba          |\n");
-        printf("|                                                        |\n");
-        printf("|                                                        |\n");
-        printf("|               Para salir presione \"-\"                  |\n");
-        printf("|                                                        |\n");
-        printf("+--------------------------------------------------------+\n");
-        printf("                   Codigo: ");
-        cin >> prefix;
+        if (choice != 3){
+            printf("+--------------------------------------------------------+\n");
+            printf("|                                                        |\n");
+            printf("|               LOG RECOLECTOR & VALIDATOR               |\n");
+            printf("|                                                        |\n");
+            printf("+--------------------------------------------------------+\n");
+            printf("|                                                        |\n");
+            printf("|          Ingrese el codigo del caso de prueba          |\n");
+            printf("|                                                        |\n");
+            printf("|                                                        |\n");
+            printf("|               Para salir presione \"-\"                  |\n");
+            printf("|                                                        |\n");
+            printf("+--------------------------------------------------------+\n");
+            printf("                   Codigo: ");
+            cin >> prefix;
 
-        if (prefix == "-"){
-            system("clear");
-            break;
+            if (prefix == "-"){
+                system("clear");
+                break;
+            }
         }
 
         system("clear");
@@ -82,6 +113,9 @@ void menu(){
             system("clear");
             break;
         case 3:
+            config_files();
+            break;
+        case 4:
             break;
         default:
             system("clear");
@@ -91,6 +125,7 @@ void menu(){
 }
 
 int main(){
+    config_files();
     menu();
     return 0;
 }
