@@ -10,12 +10,13 @@
 using namespace std;
 
 int createDirEvidence(){
-    // Borramos la evidencia anterior
+    // Creamos la nueva carpeta evidencia
+    path_evidence += "/" + prefix;
+    
+    // Borramos carpetas del mismo TestCase
     string command = "rm -rf " + path_evidence;
     system(command.c_str());
 
-    // Creamos la nueva carpeta evidencia
-    path_evidence += "/" + prefix;
     command = "mkdir -p " + path_evidence;
 
     printf("- Se ha creado la carpeta en: %s%s%s\n", CYN, path_evidence.c_str(), WHT);

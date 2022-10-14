@@ -36,14 +36,7 @@ using namespace std;
 // y en caso sea especificado, tablas de base de datos antes de
 // recolectar evidencia
 int beforeRecolect() {
-    // Verificamos si existe la variable de entorno SIXDIR
-    if (!getMainDir("SIXDIR")) {
-        printf("  %sERROR%s La variable de entorno %sSIXDIR%s no existe\n", RED,
-               WHT, YEL, WHT);
-        return BAD;
-    }
-
-    printf("Ingrese el nombre del archivo de configuración: ");
+    printf("\n- Ingrese el nombre del archivo de configuración: ");
     cin >> input;
 
     cfg_log = path_cfg + "/" + input;
@@ -58,7 +51,7 @@ int beforeRecolect() {
         return BAD;
     }
 
-    printf("Ingrese el nombre del archivo de configuración de bd: ");
+    printf("- Ingrese el nombre del archivo de configuración de bd: ");
     cin >> input;
 
     cfg_bd = path_cfg + "/" + input;
@@ -70,15 +63,11 @@ int beforeRecolect() {
 
     initParameters(cfg_log, cfg_bd);
 
-    printf("Ingrese el codigo del caso de prueba: ");
-
-    cin >> prefix;
-
     deleteDbs();
 
     date_after_launch = currentDateTime();
 
-    printf("Después de lanzar la trama, pulse cualquier tecla para capturar Evidencia\n");
+    printf("- Después de lanzar la trama, pulse cualquier tecla para capturar Evidencia\n");
 
     getchar();
     getchar();
@@ -95,7 +84,8 @@ int recolectEvidence() {
         return BAD;
     if (afterEvidence() != 0)
         return BAD;
-    string new_log_six = path_evidence + "/" + prefix + " LOG-SIX.log";
+
+    string new_log_six = path_evidence + "/" + prefix + "/" + prefix + " LOG-SIX.log";
     recolectAllTables(new_log_six);
     getchar();
 
