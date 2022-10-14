@@ -1,4 +1,4 @@
-CC=gcc
+CC=g++
 CFLAGS=-std=c++11
 SOURCE=./src/menu.cpp ./src/validateLog.cpp ./src/rabin_karp.cpp \
     ./src/getEvidence.cpp ./src/saveEvidence.cpp ./src/utilities.cpp \
@@ -6,10 +6,5 @@ SOURCE=./src/menu.cpp ./src/validateLog.cpp ./src/rabin_karp.cpp \
 MENU=menu
 BIN_PATH=../bin/
 
-all: $(SOURCE) $(MENU)
-
-$(MENU):
-        $(CC) $(SOURCE) -o $@
-
-%.o: %.c
-        $(CC) $(CFLAGS) $< -o $@
+$(MENU): $(SOURCE)
+	$(CC) $(CFLAGS) $(SOURCE) -o $(BIN_PATH)$(MENU)

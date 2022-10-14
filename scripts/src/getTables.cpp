@@ -269,11 +269,11 @@ void selectTracesQuery(Database* db, Table* table, string log_file) {
         }
     }
 
-    fullquery += table->columndate + " >= '" + string(localdate) + "' AND " + table->columntime + " >= '" + string(localtimen) + "'";
+    fullquery += table->columndate + " = '" + string(localdate) + "' AND " + table->columntime + " = '" + string(localtimen) + "'";
 
     printQuery(fullquery, table);
 
-    fullquery += ") To '" + sixdir + "/collector/files/" + prefix + "-" + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
+    fullquery += ") To '" + path_evidence + "/" + prefix + " " + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
 
     resultcommand = popen(fullquery.c_str(), "r");
 
