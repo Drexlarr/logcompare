@@ -16,6 +16,8 @@ struct Table {
     string database;
     string deltable;
     string tracefield;
+	string timefield;
+	string datefield;
     string columntrace;
     string columntime;
     string columndate;
