@@ -74,12 +74,12 @@ void getTableParameters(Table* table) {
             needed++;
         }
 
-        else if (parameter == "tracefield") {
+        if (parameter == "tracefield") {
             table->tracefield = line.substr(line.find("=") + 1, line.size());
         } else if (parameter == "timefield") {
-            table->tracefield = line.substr(line.find("=") + 1, line.size());
+            table->timefield = line.substr(line.find("=") + 1, line.size());
         } else if (parameter == "datefield") {
-            table->tracefield = line.substr(line.find("=") + 1, line.size());
+            table->datefield = line.substr(line.find("=") + 1, line.size());
         } else if (parameter == "columntrace") {
             table->columntrace = line.substr(line.find("=") + 1, line.size());
         } else if (parameter == "columndate") {
@@ -197,15 +197,15 @@ bool isInTraces(string probtrace) {
 }
 
 bool isInDates(string probdate) {
-    for (int i = 0; i < traces->size(); i++) {
-        if (traces->at(i) == probdate) return true;
+    for (int i = 0; i < dates->size(); i++) {
+        if (dates->at(i) == probdate) return true;
     }
     return false;
 }
 
 bool isInTimes(string probtime) {
-    for (int i = 0; i < traces->size(); i++) {
-        if (traces->at(i) == probtime) return true;
+    for (int i = 0; i < times->size(); i++) {
+        if (times->at(i) == probtime) return true;
     }
     return false;
 }
@@ -221,7 +221,7 @@ void getTracesFromLog(string log_file, Table* table) {
     times = new vector<string>;
 
     string year = currentDateTime();
-    year = line.subtr(0, 4);
+    year = year.substr(0, 4);
 
     while (std::getline(*flog, line)) {
         if (line.find("B0" + table->tracefield + "[") != string::npos) {
@@ -239,25 +239,25 @@ void getTracesFromLog(string log_file, Table* table) {
         if (line.find("B0" + table->timefield + "[") != string::npos) {
             aux = line.find("B0" + table->timefield + "[");
             if (!isInTimes(line.substr(aux + 5, 6))) {
-                traces->push_back(line.substr(aux + 5, 6));
+                times->push_back(line.substr(aux + 5, 6));
             }
         }
         if (line.find("DE0" + table->timefield + "[") != string::npos) {
             aux = line.find("DE0" + table->timefield + "[");
             if (!isInTimes(line.substr(aux + 6, 6))) {
-                traces->push_back(line.substr(aux + 6, 6));
+                times->push_back(line.substr(aux + 6, 6));
             }
         }
         if (line.find("B0" + table->datefield + "[") != string::npos) {
             aux = line.find("B0" + table->datefield + "[");
-            if (!isInDates(line.substr(aux + 5, 4))) {
-                traces->push_back(year + line.substr(aux + 5, 4));
+            if (!isInDates(year + line.substr(aux + 5, 4))) {
+                dates->push_back(year + line.substr(aux + 5, 4));
             }
         }
         if (line.find("DE0" + table->datefield + "[") != string::npos) {
             aux = line.find("DE0" + table->datefield + "[");
-            if (!isInDates(line.substr(aux + 6, 4))) {
-                traces->push_back(year + line.substr(aux + 6, 4));
+            if (!isInDates(year + line.substr(aux + 6, 4))) {
+                dates->push_back(year + line.substr(aux + 6, 4));
             }
         }
     }
@@ -288,6 +288,10 @@ void selectTracesQuery(Database* db, Table* table, string log_file) {
 
     if (traces->size() == 0)
         printf("WARNING: No se encontraron traces\n");
+    if (times->size() == 0)
+        printf("WARNING: No se encontraron times\n");
+    if (dates->size() == 0)
+        printf("WARNING: No se encontraron dates\n");
 
     char format_trace[14];
     char format_date[14];
@@ -342,11 +346,11 @@ void selectTracesQuery(Database* db, Table* table, string log_file) {
 
     if (times->size() == 1) {
         fullquery += table->columntime + " in ";
-        sprintf(format_time, "('%s') AND ", times->at(0).c_str());
+        sprintf(format_time, "('%s')", times->at(0).c_str());
         fullquery += string(format_time);
     } else if (times->size() > 0) {
         fullquery += table->columntime + " in ";
-        for (int i = 0; i < dates->size(); i++) {
+        for (int i = 0; i < times->size(); i++) {
             if (i < times->size() - 1 && i != 0)
                 sprintf(format_time, "'%s',", times->at(i).c_str());
             else

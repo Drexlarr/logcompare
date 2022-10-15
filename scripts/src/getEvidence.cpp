@@ -65,7 +65,7 @@ int recolectEvidence() {
     if (afterEvidence() != 0)
         return BAD;
 
-    string new_log_six = path_evidence + "/" + prefix + "/" + prefix + " LOG-SIX.log";
+    string new_log_six = path_evidence + "/" + prefix + " LOG-SIX.log";
     recolectAllTables(new_log_six);
     getchar();
 
