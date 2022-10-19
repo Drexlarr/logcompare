@@ -15,6 +15,9 @@ extern std::string sixdir;
 // Variable que contiene la ruta al directorio de evidencia
 extern std::string path_evidence;
 
+// Variable que contiene la ruta al directorio de files
+extern std::string path_validate;
+
 // Variable que contiene la ruta de los archivos .cfg
 extern std::string path_cfg;
 
@@ -28,4 +31,4 @@ extern std::string cfg_bd;
 // (0: No se hará recolección - 1: Se hará recolección)
 extern int optional_log;
 
-#endif // !GLOBAL_H
+#endif  // !GLOBAL_H

@@ -13,9 +13,9 @@
 #include "../lib/getTables.h"
 #include "../lib/global.h"
 #include "../lib/saveEvidence.h"
+#include "../lib/saveOptionalLog.h"
 #include "../lib/utilities.h"
 #include "../lib/validateLog.h"
-#include "../lib/saveOptionalLog.h"
 #include "../lib/values.h"
 
 std::vector<Database *> *dbs;
@@ -24,7 +24,6 @@ std::vector<Table *> *tables;
 std::ifstream *cfgfile;
 std::ifstream *cfgbdfile;
 FILE *resultcommand;
-
 
 char localdate[9];
 char localtimen[7];
@@ -35,8 +34,7 @@ using namespace std;
 // y en caso sea especificado, tablas de base de datos antes de
 // recolectar evidencia
 int beforeRecolect() {
-
-    if(getOptionalLog()){
+    if (getOptionalLog()) {
         printf("\n%sERROR:%s No se pudo encontrar los archivos opcionales\n", RED, WHT);
         return BAD;
     }
