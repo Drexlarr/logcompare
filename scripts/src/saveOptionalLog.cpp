@@ -96,6 +96,7 @@ int truncFile(){
 		string file;
 		while (getline(outputFile, file)){
 			ofstream ofs;
+            //TODO: No borrar archivos que no tienen .log al final
             ofs.open(sixdir + "/" + cfg_data.path + "/" + file,
                     ofstream::out | std::ofstream::trunc);
 			ofs.close();
@@ -114,9 +115,10 @@ int saveOptinalLog(){
 
 	for(int i = 0; i < cfg_data.copies.size(); i++){
 		// Guarda el nombre de los archivos en un texto plano
-		command = "find " + sixdir + "/" + cfg_data.path +
-			" -maxdepth 1 -type f -printf \"%f\\n\" | grep " +
-			cfg_data.copies[i] + " > ./.optionalFiles.txt";
+        command = "find " + sixdir + "/" + cfg_data.path + 
+            " -maxdepth -1 -type f -newermt \"" + date_after_launch + 
+            "\" -not -newermt \"" + currentDateTime() + "\" | grep \"" + 
+            cfg_data.copies[i] + "\" | awk -F '/' \'{print $(NF)}\' > ./.optionalFiles.txt";
 
 		result = system(command.c_str());	
 	}
