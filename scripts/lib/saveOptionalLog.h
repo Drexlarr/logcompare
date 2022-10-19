@@ -1,16 +1,16 @@
 #ifndef SAVE_OPTIONAL_LOG_H
 #define SAVE_OPTIONAL_LOG_H
 
-#include "utilities.h"
 #include <string>
 #include <vector>
+
+#include "utilities.h"
 
 struct configData {
     std::string main_tag;
     std::string path;
     std::vector<std::string> copies;
     int number_line = 0;
-
 };
 
 // Función que obtiene el Main Tag del archivo de configuración
@@ -28,8 +28,8 @@ int truncFile();
 // Función que obtiene la informacion del archivo de configuración
 int readConfigFile(std::ifstream &config_file);
 
-// Función que escribe en ./outputFile.txt la ruta de los archivos opcionales
-int saveOptinalLog();
+// Función que escribe en ./outputFile.txt la ruta de los archivos opcionales para limpiarlos
+int clearOptinalLog();
 
 // Función que copia los archivos opcionales listados en ./outputFile.txt al directorio
 // de evidencia
