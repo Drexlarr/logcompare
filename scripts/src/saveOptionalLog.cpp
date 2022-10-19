@@ -133,12 +133,15 @@ int cleanOptinalLog() {
 
 int loadOptionalLog() {
     // Se buscan los archivos que cumplan con el prefijo y que se hayan modificado después de la fecha de iniciada la reoleccion
-    string command = "find " + sixdir + "/" + cfg_data.path +
-                     " -maxdepth -1 -type f -newermt \"" + date_after_launch +
-                     "\" -not -newermt \"" + currentDateTime() + "\" | grep \"" +
-                     cfg_data.copies[i] + "\" | awk -F '/' \'{print $(NF)}\' > ./.optionalFiles.txt";
 
-    system(command.c_str());
+    for (int i = 0; i < cfg_data.copies.size(); i++) {
+        string command = "find " + sixdir + "/" + cfg_data.path +
+                         " -maxdepth -1 -type f -newermt \"" + date_after_launch +
+                         "\" -not -newermt \"" + currentDateTime() + "\" | grep \"" +
+                         cfg_data.copies[i] + "\" | awk -F '/' \'{print $(NF)}\' > ./.optionalFiles.txt";
+
+        system(command.c_str());
+    }
     // Copiamos los archivos al directorio de evidencia
     command = "cat ./.optionalFiles.txt | xargs -I{} cp " +
               sixdir + "/" + cfg_data.path + "/{} " + path_evidence + "/" + prefix + "-{}";
