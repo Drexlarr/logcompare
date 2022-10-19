@@ -1,10 +1,11 @@
 #include "../lib/utilities.h"
+
 #include "../lib/global.h"
 
 const std::string currentDateTime() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
+    time_t now = time(0);
+    struct tm tstruct;
+    char buf[80];
     tstruct = *localtime(&now);
     strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
 
@@ -12,20 +13,21 @@ const std::string currentDateTime() {
 }
 
 const std::string ddlFormat() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
+    time_t now = time(0);
+    struct tm tstruct;
+    char buf[80];
     tstruct = *localtime(&now);
     strftime(buf, sizeof(buf), "ddl%Y%m%d.log", &tstruct);
 
     return buf;
 }
 
-bool getMainDir(const char *name){
+bool getMainDir(const char *name) {
     const char *ret = getenv(name);
-    if (ret){
-        sixdir = std::string (ret);
+    if (ret) {
+        sixdir = std::string(ret);
         path_evidence = sixdir + "/log/collector";
+        path_validate = sixdir + "/binappl/collector/files";
         path_cfg = sixdir + "/binappl/collector/cfgfiles";
     }
     return !!ret;

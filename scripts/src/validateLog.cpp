@@ -75,6 +75,7 @@ void compFiles() {
         logfile->seekg(0);
         ocd = 0;
         *resultfile << lineinput << endl;
+        printf("la linea a comparar es %s", lineinput.substr(lineinput.find(".") + 1).c_str());
         while (getline(*logfile, linelog)) {
             arr = rabin_karp(&lineinput.substr(lineinput.find(".") + 1)[0], &linelog[0], 101);
             ocd += arr[99];
@@ -83,7 +84,9 @@ void compFiles() {
                 *resultfile << " ---------- HALLADO - NOMBRE DEL PROCESO \t\t" << process_name << endl;
             }
         }
+
         if (ocd) *resultfile << endl;
+
         if (!ocd) {
             ntfound++;
             ss << count;
@@ -116,30 +119,33 @@ void clearXmlFile(string dirtyxmlfile_name) {
     bool completedivs = false;
     stringstream ss;
     string auxstr;
-    command = "sed '1,/<expectedresults>/d' '" + dirtyxmlfile_name + "' > " + path_evidence + "clear.xml";
+    command = "sed '1,/<expectedresults>/d' '" + dirtyxmlfile_name + "' > " + path_validate + "/clear.xml";
     system(command.c_str());
-    command = "sed -i 's/&nbsp;/ /g' " + path_evidence + "clear.xml";
+    command = "sed -i 's/&nbsp;/ /g' " + path_validate + "/clear.xml";
     system(command.c_str());
-    command = "sed -i 's/ </</g' " + path_evidence + "clear.xml";
+    command = "sed -i 's/ </</g' " + path_validate + "/clear.xml";
     system(command.c_str());
-    command = "sed -i \"s,/ol,-ol,\" " + path_evidence + "clear.xml";
+    command = "sed -i \"s,/ol,-ol,\" " + path_validate + "/clear.xml";
     system(command.c_str());
-
     xmlfile->close();
 
-    xmlfile->open(path_evidence + "clear.xml");
-    command = "grep -o '<ol start' " + path_evidence + "clear.xml | wc -l";
+    command = path_validate + "/clear.xml";
+    xmlfile->open(command.c_str());
+    command = "grep -o '<ol start' " + path_validate + "/clear.xml | wc -l", "r";
     results = popen(command.c_str(), "r");
 
     fgets(numberdivs, 3, results);
     divs = atoi(numberdivs);
 
     if (divs == 0) {
-        command = "sed -i \"/-ol>/Q\" " + path_evidence + "clear.xml";
+        command = "sed -i \"/-ol>/Q\" " + path_validate + "/clear.xml";
         system(command.c_str());
-    } else {
+    }
+
+    else {
         while (getline(*xmlfile, line)) {
             count++;
+
             if (line.find("<ol start") != string::npos)
                 aux++;
 
@@ -149,7 +155,7 @@ void clearXmlFile(string dirtyxmlfile_name) {
                 count++;
                 ss << count;
                 ss >> auxstr;
-                command = "sed -i '" + auxstr + "'',$d' " + path_evidence + "clear.xml";
+                command = "sed -i '" + auxstr + "'',$d' " + path_validate + "/clear.xml";
                 system(command.c_str());
                 break;
             }
@@ -161,38 +167,42 @@ void clearXmlFile(string dirtyxmlfile_name) {
 void validateLog() {
     string logfile_name;
     string dirtyxmlfile_name;
+    string command;
 
     printf("Ingrese el nombre del archivo xml: ");
     cin >> dirtyxmlfile_name;
-    dirtyxmlfile_name = path_evidence + dirtyxmlfile_name;
+    dirtyxmlfile_name = path_validate + "/" + dirtyxmlfile_name;
 
     if (!checkIfFileExists(dirtyxmlfile_name)) {
         printf("%sERROR:%s No se encontró el archivo, nombre o ruta invalida", RED, WHT);
         return;
     }
 
-    printf("Ingrese el nombre del archivo log: ");
+    // Aquí Raúl hará lo mismo que hace en la parte de elegir el archivo log
+    printf("Ingrese el nombre del testcase: ");
     cin >> logfile_name;
-    logfile_name = path_evidence + logfile_name;
+    logfile_name = path_evidence + "/" + logfile_name + "/" + logfile_name + " LOG-SIX.log";
 
-    if (!checkIfFileExists(dirtyxmlfile_name)) {
-        printf("%sERROR:%s No se encontró el archivo, nombre o ruta invalida", RED, WHT);
+    if (!checkIfFileExists(logfile_name)) {
+        printf("%sERROR:%s No se encontró el archivo, el testcase no existe", RED, WHT);
         return;
     }
 
-    inputfile = new fstream(path_evidence + "input.txt", std::ofstream::out | std::ofstream::trunc);
-    xmlfile = new ifstream(path_evidence + "clear.xml");
-    resultfile = new fstream(path_evidence + "results.txt", std::ofstream::out | std::ofstream::trunc);
+    inputfile = new fstream(path_validate + "/input.txt", std::ofstream::out | std::ofstream::trunc);
+    xmlfile = new ifstream(path_validate + "/clear.xml");
+    resultfile = new fstream(path_validate + "/results.txt", std::ofstream::out | std::ofstream::trunc);
     logfile = new fstream(logfile_name.c_str());
     dirtyxmlfile = new fstream(dirtyxmlfile_name.c_str());
 
     clearXmlFile(dirtyxmlfile_name);
 
-    xmlfile->open(path_evidence + "clear.xml");
+    command = path_validate + "/clear.xml";
+    xmlfile->open(command.c_str());
 
     findLogLines();
     inputfile->close();
-    inputfile->open(path_evidence + "input.txt");
+    command = path_validate + "/input.txt";
+    inputfile->open(command.c_str());
 
     compFiles();
 
