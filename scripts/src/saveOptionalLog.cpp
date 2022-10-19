@@ -121,7 +121,10 @@ int saveOptinalLog(){
 		result = system(command.c_str());	
 	}
 
-    truncFile();
+    if (!result)
+        truncFile();
+
+    cfg_data.copies.clear();
 
 	return result;
 }
