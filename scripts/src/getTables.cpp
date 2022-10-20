@@ -152,7 +152,7 @@ void getCredentialsBD(string database, Database* DB) {
 // según los valores que contengan los atributos del parametro db
 string connectQuery(Database* db) {
     char comm[101];
-    sprintf(comm, "export PGPASSWORD='%s'; psql -h %s -p %s -U %s", db->password.c_str(), db->host.c_str(), db->port.c_str(), db->user.c_str());
+    sprintf(comm, "psql -h %s -p %s -U %s", db->host.c_str(), db->port.c_str(), db->user.c_str());
     return string(comm);
 }
 
@@ -363,8 +363,6 @@ void selectTracesQuery(Database* db, Table* table, string log_file) {
         }
     }
 
-    printQuery(fullquery, table);
-
     fullquery += ") To '" + path_evidence + "/" + prefix + " " + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
 
     resultcommand = popen(fullquery.c_str(), "r");
@@ -388,7 +386,6 @@ void selectAllQuery(Database* db, Table* table) {
 
     connect_command = connectQuery(db);
     query += connect_command + " -c \"\\copy (SELECT * FROM " + table->tablename;
-    printQuery(query, table);
     query += ") To '" + path_evidence + "/" + prefix + " " + table->tablename + ".csv' With CSV DELIMITER ',' HEADER;\"";
 
     resultcommand = popen(query.c_str(), "r");

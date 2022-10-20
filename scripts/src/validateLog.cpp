@@ -75,7 +75,6 @@ void compFiles() {
         logfile->seekg(0);
         ocd = 0;
         *resultfile << lineinput << endl;
-        printf("la linea a comparar es %s", lineinput.substr(lineinput.find(".") + 1).c_str());
         while (getline(*logfile, linelog)) {
             arr = rabin_karp(&lineinput.substr(lineinput.find(".") + 1)[0], &linelog[0], 101);
             ocd += arr[99];
